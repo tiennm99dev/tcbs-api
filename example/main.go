@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	tcbs "github.com/tiennm99/tcbs-api/src"
+	tcbs "github.com/tiennm99/tcbs-api"
 )
 
 func main() {
