@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -23,6 +24,7 @@ const (
 type Client struct {
 	baseURL    string
 	httpClient *http.Client
+	mu         sync.RWMutex
 	token      string
 }
 
@@ -66,7 +68,16 @@ func NewClient(opts ...Option) *Client {
 
 // SetToken sets the Bearer token for authentication.
 func (c *Client) SetToken(token string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	c.token = token
+}
+
+// currentToken returns the current Bearer token.
+func (c *Client) currentToken() string {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return c.token
 }
 
 // APIError represents an error response from the TCBS API.
@@ -104,8 +115,8 @@ func (c *Client) doRequest(ctx context.Context, method, path string, query url.V
 	}
 	req.Header.Set("Accept", "application/json")
 
-	if c.token != "" {
-		req.Header.Set("Authorization", "Bearer "+c.token)
+	if token := c.currentToken(); token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
 	}
 
 	resp, err := c.httpClient.Do(req)

@@ -32,6 +32,6 @@ func (c *Client) GetToken(ctx context.Context, apiKey, otp string) (*TokenRespon
 	if err != nil {
 		return nil, err
 	}
-	c.token = resp.AccessToken
+	c.SetToken(resp.AccessToken)
 	return &resp, nil
 }
