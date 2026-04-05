@@ -113,8 +113,8 @@ func (c *Client) GetDerivativeConditionOrders(ctx context.Context, accountID, su
 }
 
 // PlaceDerivativeNormalOrder places a normal derivative order.
-func (c *Client) PlaceDerivativeNormalOrder(ctx context.Context, req *DerivativeNormalOrderRequest) (*OrderIDResponse, error) {
-	var resp OrderIDResponse
+func (c *Client) PlaceDerivativeNormalOrder(ctx context.Context, req *DerivativeNormalOrderRequest) (*DerivativeResponse[*DerivativeNormalOrderPlaceResponse], error) {
+	var resp DerivativeResponse[*DerivativeNormalOrderPlaceResponse]
 	err := c.post(ctx, "/khronos/v1/order/place", req, &resp)
 	if err != nil {
 		return nil, err
@@ -123,8 +123,8 @@ func (c *Client) PlaceDerivativeNormalOrder(ctx context.Context, req *Derivative
 }
 
 // PlaceDerivativeConditionOrder places a conditional derivative order (SL/TP, Arbitrage, etc.).
-func (c *Client) PlaceDerivativeConditionOrder(ctx context.Context, req *DerivativeConditionOrderRequest) (*OrderIDResponse, error) {
-	var resp OrderIDResponse
+func (c *Client) PlaceDerivativeConditionOrder(ctx context.Context, req *DerivativeConditionOrderRequest) (*DerivativeResponse[*DerivativeConditionOrderPlaceResponse], error) {
+	var resp DerivativeResponse[*DerivativeConditionOrderPlaceResponse]
 	err := c.post(ctx, "/khronos/v1/order/condition/place", req, &resp)
 	if err != nil {
 		return nil, err
@@ -133,8 +133,8 @@ func (c *Client) PlaceDerivativeConditionOrder(ctx context.Context, req *Derivat
 }
 
 // ChangeDerivativeNormalOrder modifies an existing normal derivative order.
-func (c *Client) ChangeDerivativeNormalOrder(ctx context.Context, req *DerivativeChangeOrderRequest) (*OrderIDResponse, error) {
-	var resp OrderIDResponse
+func (c *Client) ChangeDerivativeNormalOrder(ctx context.Context, req *DerivativeChangeNormalOrderRequest) (*DerivativeResponse[string], error) {
+	var resp DerivativeResponse[string]
 	err := c.post(ctx, "/khronos/v1/order/change", req, &resp)
 	if err != nil {
 		return nil, err
@@ -143,8 +143,8 @@ func (c *Client) ChangeDerivativeNormalOrder(ctx context.Context, req *Derivativ
 }
 
 // ChangeDerivativeConditionOrder modifies an existing conditional derivative order.
-func (c *Client) ChangeDerivativeConditionOrder(ctx context.Context, req *DerivativeChangeOrderRequest) (*OrderIDResponse, error) {
-	var resp OrderIDResponse
+func (c *Client) ChangeDerivativeConditionOrder(ctx context.Context, req *DerivativeChangeConditionOrderRequest) (*DerivativeResponse[string], error) {
+	var resp DerivativeResponse[string]
 	err := c.post(ctx, "/khronos/v2/order/condition/change", req, &resp)
 	if err != nil {
 		return nil, err
@@ -153,8 +153,8 @@ func (c *Client) ChangeDerivativeConditionOrder(ctx context.Context, req *Deriva
 }
 
 // CancelDerivativeNormalOrder cancels a normal derivative order.
-func (c *Client) CancelDerivativeNormalOrder(ctx context.Context, req *DerivativeCancelOrderRequest) (*OrderIDResponse, error) {
-	var resp OrderIDResponse
+func (c *Client) CancelDerivativeNormalOrder(ctx context.Context, req *DerivativeCancelNormalOrderRequest) (*DerivativeResponse[*DerivativeCancelNormalOrderResponse], error) {
+	var resp DerivativeResponse[*DerivativeCancelNormalOrderResponse]
 	err := c.post(ctx, "/khronos/v1/order/cancel", req, &resp)
 	if err != nil {
 		return nil, err
@@ -163,8 +163,8 @@ func (c *Client) CancelDerivativeNormalOrder(ctx context.Context, req *Derivativ
 }
 
 // CancelDerivativeConditionOrder cancels a conditional derivative order.
-func (c *Client) CancelDerivativeConditionOrder(ctx context.Context, req *DerivativeCancelOrderRequest) (*OrderIDResponse, error) {
-	var resp OrderIDResponse
+func (c *Client) CancelDerivativeConditionOrder(ctx context.Context, req *DerivativeCancelConditionOrderRequest) (*DerivativeResponse[string], error) {
+	var resp DerivativeResponse[string]
 	err := c.post(ctx, "/khronos/v1/order/condition/cancel", req, &resp)
 	if err != nil {
 		return nil, err
@@ -173,7 +173,6 @@ func (c *Client) CancelDerivativeConditionOrder(ctx context.Context, req *Deriva
 }
 
 // GetDerivativeMarketInfo retrieves derivative contract pricing and information.
-// tickers is a list of derivative contract symbols.
 func (c *Client) GetDerivativeMarketInfo(ctx context.Context, tickers []string) ([]DerivativeMarketInfo, error) {
 	query := url.Values{}
 	query.Set("tickers", strings.Join(tickers, ","))

@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to get token: %v", err)
 	}
-	fmt.Printf("Token obtained, expires in %d seconds\n", token.ExpiresIn)
+	fmt.Printf("Token obtained: %s\n", token.Token)
 
 	// Or set token directly if you already have one:
 	// client.SetToken("your-jwt-token")
@@ -33,7 +33,10 @@ func main() {
 		log.Fatalf("Failed to get account info: %v", err)
 	}
 	if account.BasicInfo != nil {
-		fmt.Printf("Account: %s - %s\n", account.BasicInfo.Code105C, account.BasicInfo.FullName)
+		fmt.Printf("Account: %s (status: %s)\n", account.BasicInfo.Code105C, account.BasicInfo.Status)
+	}
+	if account.PersonalInfo != nil {
+		fmt.Printf("Name: %s\n", account.PersonalInfo.FullName)
 	}
 
 	// 3. Get stock prices
@@ -49,7 +52,7 @@ func main() {
 	order, err := client.PlaceOrder(ctx, "0001170730", &tcbs.PlaceOrderRequest{
 		Symbol:    "FPT",
 		ExecType:  "NB", // Buy
-		OrderQtty: 100,
+		Quantity:  100,
 		Price:     120000,
 		PriceType: "LO", // Limit order
 	})
@@ -89,4 +92,18 @@ func main() {
 	for _, d := range derivatives {
 		fmt.Printf("%s: last=%.1f OI=%.0f\n", d.Ticker, d.LastPrice, d.OpenInterest)
 	}
+
+	// 9. Get supply/demand (15-minute)
+	sd, err := client.GetSupplyDemand(ctx, "FPT", "all")
+	if err != nil {
+		log.Fatalf("Failed to get supply/demand: %v", err)
+	}
+	fmt.Printf("Supply/demand data points: %d\n", len(sd.Data))
+
+	// 10. Get monthly supply/demand
+	sdm, err := client.GetSupplyDemandMonth(ctx, "FPT", "all")
+	if err != nil {
+		log.Fatalf("Failed to get monthly supply/demand: %v", err)
+	}
+	fmt.Printf("Monthly supply/demand data points: %d\n", len(sdm.Data))
 }

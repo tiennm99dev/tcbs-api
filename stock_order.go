@@ -25,7 +25,7 @@ func (c *Client) UpdateOrder(ctx context.Context, accountNo, orderID string, req
 	return &resp, nil
 }
 
-// CancelOrder cancels an existing stock order.
+// CancelOrder cancels existing stock orders.
 func (c *Client) CancelOrder(ctx context.Context, accountNo string, req *CancelOrderRequest) (*CancelOrderResponse, error) {
 	var resp CancelOrderResponse
 	err := c.put(ctx, fmt.Sprintf("/akhlys/v1/accounts/%s/cancel-orders", accountNo), req, &resp)

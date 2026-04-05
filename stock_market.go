@@ -8,7 +8,6 @@ import (
 )
 
 // GetStockPrices retrieves stock ticker information and pricing.
-// tickers is a comma-separated list of stock symbols.
 func (c *Client) GetStockPrices(ctx context.Context, tickers []string) ([]MarketStockInfo, error) {
 	query := url.Values{}
 	query.Set("tickers", strings.Join(tickers, ","))
@@ -22,7 +21,6 @@ func (c *Client) GetStockPrices(ctx context.Context, tickers []string) ([]Market
 }
 
 // GetForeignRoom retrieves foreign investor room information.
-// tickers is a comma-separated list of stock symbols.
 func (c *Client) GetForeignRoom(ctx context.Context, tickers []string) ([]ForeignRoomInfo, error) {
 	query := url.Values{}
 	query.Set("tickers", strings.Join(tickers, ","))
@@ -35,13 +33,12 @@ func (c *Client) GetForeignRoom(ctx context.Context, tickers []string) ([]Foreig
 	return resp, nil
 }
 
-// GetPutThroughInfo retrieves put-through agreement information.
-// tickers is a comma-separated list of stock symbols.
-func (c *Client) GetPutThroughInfo(ctx context.Context, tickers []string) ([]PutThroughInfo, error) {
+// GetPutThroughInfo retrieves put-through match information.
+func (c *Client) GetPutThroughInfo(ctx context.Context, tickers []string) ([]PutThroughMatchInfo, error) {
 	query := url.Values{}
 	query.Set("tickers", strings.Join(tickers, ","))
 
-	var resp []PutThroughInfo
+	var resp []PutThroughMatchInfo
 	err := c.get(ctx, "/tartarus/v1/putThroughSnaps", query, &resp)
 	if err != nil {
 		return nil, err
@@ -70,16 +67,46 @@ func (c *Client) GetIntradayHistory(ctx context.Context, params IntradayHistoryP
 	return &resp, nil
 }
 
-// GetSupplyDemand retrieves supply and demand data for a ticker.
+// GetSupplyDemand retrieves supply and demand data for a ticker (15-minute intervals).
 // investorType is one of: "sheep", "wolf", "shark", "all".
-func (c *Client) GetSupplyDemand(ctx context.Context, ticker, investorType string) (*SupplyDemandResponse, error) {
+func (c *Client) GetSupplyDemand(ctx context.Context, ticker, investorType string) (*SupplyDemand15mResponse, error) {
+	query := url.Values{}
+	if investorType != "" {
+		query.Set("type", investorType)
+	}
+
+	var resp SupplyDemand15mResponse
+	err := c.get(ctx, fmt.Sprintf("/nyx/v1/intraday/%s/bsa", ticker), query, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// GetSupplyDemandExt retrieves extended supply and demand data for a ticker (15-minute intervals).
+func (c *Client) GetSupplyDemandExt(ctx context.Context, ticker, investorType string) (*SupplyDemand15mResponse, error) {
+	query := url.Values{}
+	if investorType != "" {
+		query.Set("type", investorType)
+	}
+
+	var resp SupplyDemand15mResponse
+	err := c.get(ctx, fmt.Sprintf("/nyx/v1/intraday/%s/bsa-ext", ticker), query, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// GetSupplyDemandMonth retrieves monthly supply and demand data for a ticker.
+func (c *Client) GetSupplyDemandMonth(ctx context.Context, ticker, investorType string) (*SupplyDemandResponse, error) {
 	query := url.Values{}
 	if investorType != "" {
 		query.Set("type", investorType)
 	}
 
 	var resp SupplyDemandResponse
-	err := c.get(ctx, fmt.Sprintf("/nyx/v1/intraday/%s/bsa", ticker), query, &resp)
+	err := c.get(ctx, fmt.Sprintf("/nyx/v1/intraday/%s/bsa-month", ticker), query, &resp)
 	if err != nil {
 		return nil, err
 	}

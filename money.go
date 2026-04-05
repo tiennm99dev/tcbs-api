@@ -13,8 +13,8 @@ func (c *Client) TransferMoney(ctx context.Context, req *MoneyTransferRequest) (
 }
 
 // WithdrawMargin withdraws margin for derivative accounts.
-func (c *Client) WithdrawMargin(ctx context.Context, req *MarginDepositWithdrawRequest) (*MarginDepositWithdrawResponse, error) {
-	var resp MarginDepositWithdrawResponse
+func (c *Client) WithdrawMargin(ctx context.Context, req *MarginWithdrawRequest) (*MarginWithdrawResponse, error) {
+	var resp MarginWithdrawResponse
 	err := c.post(ctx, "/khronos/v1/cash/withdraw/update", req, &resp)
 	if err != nil {
 		return nil, err
@@ -23,8 +23,8 @@ func (c *Client) WithdrawMargin(ctx context.Context, req *MarginDepositWithdrawR
 }
 
 // DepositMargin deposits margin for derivative accounts.
-func (c *Client) DepositMargin(ctx context.Context, req *MarginDepositWithdrawRequest) (*MarginDepositWithdrawResponse, error) {
-	var resp MarginDepositWithdrawResponse
+func (c *Client) DepositMargin(ctx context.Context, req *MarginDepositRequest) (*MarginDepositResponse, error) {
+	var resp MarginDepositResponse
 	err := c.post(ctx, "/khronos/v1/cash/deposit/update", req, &resp)
 	if err != nil {
 		return nil, err
