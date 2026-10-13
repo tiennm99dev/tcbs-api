@@ -1,11 +1,11 @@
-# tcbs-api
+# stock-advisor
 
 Go SDK for [TCBS](https://tcinvest.tcbs.com.vn/) OpenAPI trading platform.
 
 ## Install
 
 ```bash
-go get github.com/tiennm99/tcbs-api
+go get github.com/miti99dev/stock-advisor
 ```
 
 ## Quick Start
@@ -18,7 +18,7 @@ import (
     "fmt"
     "log"
 
-    tcbs "github.com/tiennm99/tcbs-api"
+    tcbs "github.com/miti99dev/stock-advisor"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	tcbs "github.com/tiennm99/tcbs-api"
+	tcbs "github.com/miti99dev/stock-advisor"
 )
 
 func main() {

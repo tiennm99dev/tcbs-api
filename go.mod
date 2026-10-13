@@ -1,4 +1,4 @@
-module github.com/tiennm99/tcbs-api
+module github.com/miti99dev/stock-advisor
 
 go 1.22.2
 
