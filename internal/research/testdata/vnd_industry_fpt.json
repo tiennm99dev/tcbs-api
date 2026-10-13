@@ -1,0 +1,43 @@
+{
+ "data": [
+  {
+   "industryCode": "9533",
+   "industryLevel": "4",
+   "higherLevelCode": "9530",
+   "englishName": "Computer Services",
+   "vietnameseName": "Dịch vụ máy tính",
+   "totalCount": 5.0,
+   "codeList": "SBD,CMT,PAI,FPT,CMG"
+  },
+  {
+   "industryCode": "9530",
+   "industryLevel": "3",
+   "higherLevelCode": "9500",
+   "englishName": "Software & Computer Services",
+   "vietnameseName": "Phần mềm & Dịch vụ máy tính",
+   "totalCount": 13.0,
+   "codeList": "SGT,SBD,ONW,VNZ,ELC,CMT,PAI,PIA,VLA,FPT,SRA,ITD,CMG"
+  },
+  {
+   "industryCode": "9000",
+   "industryLevel": "1",
+   "englishName": "TECHNOLOGY ",
+   "vietnameseName": "Công nghệ",
+   "totalCount": 40.0,
+   "codeList": "LTC,HPT,SGT,VTK,SBD,VHG,KST,ONE,CKV,ONW,VNZ,POT,TLC,ELC,NHW,CMT,VTH,PSD,BEL,HIG,PAI,PIA,SMT,VIE,VLA,SAM,TAG,PMT,VTE,FPT,ST8,TST,SRA,PMJ,TYA,ITD,TGP,VAT,CMG,ICT"
+  },
+  {
+   "industryCode": "9500",
+   "industryLevel": "2",
+   "higherLevelCode": "9000",
+   "englishName": "Technology",
+   "vietnameseName": "Công nghệ",
+   "totalCount": 40.0,
+   "codeList": "LTC,HPT,SGT,VTK,SBD,VHG,KST,ONE,CKV,ONW,VNZ,POT,TLC,ELC,NHW,CMT,VTH,PSD,BEL,HIG,PAI,PIA,SMT,VIE,VLA,SAM,TAG,PMT,VTE,FPT,ST8,TST,SRA,PMJ,TYA,ITD,TGP,VAT,CMG,ICT"
+  }
+ ],
+ "currentPage": 1,
+ "size": 20,
+ "totalElements": 4,
+ "totalPages": 1
+}

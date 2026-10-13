@@ -1,0 +1,104 @@
+{
+ "serverDateTime": "2026-10-13T14:51:41.395377992",
+ "traceId": "a435c221543aacf0d58f5f896e83e063",
+ "status": 200,
+ "code": 0,
+ "msg": "Successful",
+ "exception": null,
+ "successful": true,
+ "data": {
+  "content": [
+   {
+    "ticker": "FPT",
+    "eventCode": "ISS",
+    "eventNameEn": "Share Issue",
+    "exrightDate": "2026-09-21T00:00:00",
+    "valuePerShare": null,
+    "exerciseRatio": 0.1,
+    "publicDate": "2026-09-16T00:00:00"
+   },
+   {
+    "ticker": "FPT",
+    "eventCode": "ISS",
+    "eventNameEn": "Share Issue",
+    "exrightDate": "2026-06-24T00:00:00",
+    "valuePerShare": null,
+    "exerciseRatio": 0.00135,
+    "publicDate": "2026-06-29T00:00:00"
+   },
+   {
+    "ticker": "FPT",
+    "eventCode": "ISS",
+    "eventNameEn": "Share Issue",
+    "exrightDate": "2026-06-24T00:00:00",
+    "valuePerShare": null,
+    "exerciseRatio": 0.00499,
+    "publicDate": "2026-06-29T00:00:00"
+   },
+   {
+    "ticker": "FPT",
+    "eventCode": "DIV",
+    "eventNameEn": "Cash Dividend",
+    "exrightDate": "2026-05-28T00:00:00",
+    "valuePerShare": 1000.0,
+    "exerciseRatio": 0.1,
+    "publicDate": "2026-05-22T00:00:00"
+   },
+   {
+    "ticker": "FPT",
+    "eventCode": "DIV",
+    "eventNameEn": "Cash Dividend",
+    "exrightDate": "2025-12-01T00:00:00",
+    "valuePerShare": 1000.0,
+    "exerciseRatio": 0.1,
+    "publicDate": "2025-11-19T00:00:00"
+   },
+   {
+    "ticker": "FPT",
+    "eventCode": "ISS",
+    "eventNameEn": "Share Issue",
+    "exrightDate": "2025-07-21T00:00:00",
+    "valuePerShare": null,
+    "exerciseRatio": 0.15,
+    "publicDate": "2025-07-16T00:00:00"
+   },
+   {
+    "ticker": "FPT",
+    "eventCode": "DIV",
+    "eventNameEn": "Cash Dividend",
+    "exrightDate": "2025-06-12T00:00:00",
+    "valuePerShare": 1000.0,
+    "exerciseRatio": 0.1,
+    "publicDate": "2025-06-06T00:00:00"
+   }
+  ],
+  "pageable": {
+   "pageNumber": 0,
+   "pageSize": 50,
+   "sort": {
+    "orders": [],
+    "unsorted": true,
+    "sorted": false,
+    "empty": true
+   },
+   "offset": 0,
+   "unpaged": false,
+   "paged": true
+  },
+  "total": 19,
+  "totalElements": 19,
+  "last": true,
+  "totalPages": 1,
+  "numberOfElements": 7,
+  "first": true,
+  "size": 50,
+  "number": 0,
+  "sort": {
+   "orders": [],
+   "unsorted": true,
+   "sorted": false,
+   "empty": true
+  },
+  "empty": false
+ }
+}

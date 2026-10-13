@@ -1,0 +1,12 @@
+{
+  "object": "se",
+  "accountNo": "0001N",
+  "custodyID": "105C000001",
+  "fullName": "TEST USER",
+  "stock": [
+    {"symbol":"FPT","secType":"001","totalQtty":"1000","availableTrading":"800","t0":"0","t1":"100","t2":"100","blocked":"0","mortgaged":"0","onHold":"0","stockDividend":"0","cashDividend":"0","costPrice":"95.5","currentPrice":"120.3"},
+    {"symbol":"E1VFVN30","secType":"008","totalQtty":"250","availableTrading":"250","costPrice":"25.1","currentPrice":"26.4"},
+    {"symbol":"VNM","secType":"001","totalQtty":"137","availableTrading":"137","costPrice":"0","currentPrice":"61.2","blocked":"0E-10"},
+    {"symbol":"OLD","secType":"001","totalQtty":"0","availableTrading":"0","costPrice":"0","currentPrice":"0"}
+  ]
+}

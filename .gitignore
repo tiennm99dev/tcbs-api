@@ -30,3 +30,8 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# stock-advisor: public-data cache, reports, raw TCBS dumps (--dump-raw)
+/.cache/
+/out/
+/raw/
