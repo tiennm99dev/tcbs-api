@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -76,10 +77,41 @@ func TestAuthorizationHeader(t *testing.T) {
 	var gotAuth string
 	client, _ := newTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		gotAuth = r.Header.Get("Authorization")
-		writeJSON(t, w, []MarketStockInfo{})
+		writeJSON(t, w, MarketStockInfoResponse{})
 	})
 	_, _ = client.GetStockPrices(context.Background(), []string{"FPT"})
 	if gotAuth != "Bearer test-token" {
 		t.Errorf("expected 'Bearer test-token', got %q", gotAuth)
+	}
+}
+
+func TestAPIError_CodeMessage(t *testing.T) {
+	client, _ := newTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"code":"203074","message":"The API Key is invalid"}`))
+	})
+	err := client.get(context.Background(), "/fail", nil, nil)
+	apiErr, ok := err.(*APIError)
+	if !ok {
+		t.Fatalf("expected *APIError, got %T", err)
+	}
+	if apiErr.Code != "203074" {
+		t.Errorf("expected code 203074, got %q", apiErr.Code)
+	}
+	if apiErr.Message != "The API Key is invalid" {
+		t.Errorf("unexpected message %q", apiErr.Message)
+	}
+	if got := apiErr.Error(); !strings.Contains(got, "203074") || !strings.Contains(got, "The API Key is invalid") {
+		t.Errorf("unexpected Error(): %s", got)
+	}
+	if strings.Contains(apiErr.Error(), "test-token") {
+		t.Error("Error() must not include the bearer token")
+	}
+}
+
+func TestAPIError_TruncatesBody(t *testing.T) {
+	e := &APIError{StatusCode: 500, Body: strings.Repeat("x", 2000)}
+	if got := e.Error(); len(got) > 600 {
+		t.Errorf("expected truncated error, got %d bytes", len(got))
 	}
 }

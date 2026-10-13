@@ -47,11 +47,11 @@ type OrderIDRef struct {
 
 // CancelOrderResponse represents the response after cancelling stock orders.
 type CancelOrderResponse struct {
-	Object     string   `json:"object"`
-	PageSize   int      `json:"pageSize"`
-	PageIndex  int      `json:"pageIndex"`
-	TotalCount int      `json:"totalCount"`
-	Data       []DataX  `json:"data"`
+	Object     string  `json:"object"`
+	PageSize   int     `json:"pageSize"`
+	PageIndex  int     `json:"pageIndex"`
+	TotalCount int     `json:"totalCount"`
+	Data       []DataX `json:"data"`
 }
 
 // DataX holds cancel order result details.
@@ -122,11 +122,11 @@ type OrderInfo struct {
 
 // CommandMatchInformationResponse represents matching details.
 type CommandMatchInformationResponse struct {
-	Object     string                           `json:"object"`
-	TotalCount int                              `json:"totalCount"`
-	PageSize   int                              `json:"pageSize"`
-	PageIndex  int                              `json:"pageIndex"`
-	Data       []CommandMatchInformationDetail  `json:"data"`
+	Object     string                          `json:"object"`
+	TotalCount int                             `json:"totalCount"`
+	PageSize   int                             `json:"pageSize"`
+	PageIndex  int                             `json:"pageIndex"`
+	Data       []CommandMatchInformationDetail `json:"data"`
 }
 
 // CommandMatchInformationDetail represents a single matching detail.
@@ -146,56 +146,56 @@ type CommandMatchInformationDetail struct {
 
 // PurchasingPowerResponse represents purchasing power information.
 type PurchasingPowerResponse struct {
-	AccountNo        string  `json:"accountNo"`
-	CustodyID        string  `json:"custodyID"`
-	Symbol           string  `json:"symbol"`
-	Price            float64 `json:"price"`
-	PP0              float64 `json:"pp0"`
-	PPSE             float64 `json:"ppse"`
-	PPSERef          float64 `json:"ppseref"`
-	MaxBuyQuantity   float64 `json:"maxBuyQuantity"`
-	RealMaxBuyQty    float64 `json:"realMaxBuyQuantity"`
-	MinBuyQuantity   float64 `json:"minBuyQuantity"`
-	MarginRatioLoan  float64 `json:"marginRatioLoan"`
-	MarginPriceLoan  float64 `json:"marginPriceLoan"`
-	RateBrkS         string  `json:"rateBrkS"`
-	RateBrkB         string  `json:"rateBrkB"`
+	AccountNo       string  `json:"accountNo"`
+	CustodyID       string  `json:"custodyID"`
+	Symbol          string  `json:"symbol"`
+	Price           float64 `json:"price"`
+	PP0             float64 `json:"pp0"`
+	PPSE            float64 `json:"ppse"`
+	PPSERef         float64 `json:"ppseref"`
+	MaxBuyQuantity  float64 `json:"maxBuyQuantity"`
+	RealMaxBuyQty   float64 `json:"realMaxBuyQuantity"`
+	MinBuyQuantity  float64 `json:"minBuyQuantity"`
+	MarginRatioLoan float64 `json:"marginRatioLoan"`
+	MarginPriceLoan float64 `json:"marginPriceLoan"`
+	RateBrkS        string  `json:"rateBrkS"`
+	RateBrkB        string  `json:"rateBrkB"`
 }
 
 // --- Margin ---
 
 // MarginQuotaResponse represents margin quota information.
 type MarginQuotaResponse struct {
-	CustodyID     string  `json:"custodyID"`
-	AccountNo     string  `json:"accountNo"`
-	AFType        string  `json:"aftype"`
-	VSDStatus     string  `json:"vsdStatus"`
-	AccountStatus string  `json:"accountStatus"`
-	MarginLimit   float64 `json:"marginLimit"`
-	IsIA          string  `json:"isIA"`
-	BankName      string  `json:"bankName"`
-	BankAccount   string  `json:"bankAccount"`
-	AccountType   string  `json:"accountType"`
+	CustodyID     string `json:"custodyID"`
+	AccountNo     string `json:"accountNo"`
+	AFType        string `json:"aftype"`
+	VSDStatus     string `json:"vsdStatus"`
+	AccountStatus string `json:"accountStatus"`
+	MarginLimit   Number `json:"marginLimit"`
+	IsIA          string `json:"isIA"`
+	BankName      string `json:"bankName"`
+	BankAccount   string `json:"bankAccount"`
+	AccountType   string `json:"accountType"`
 }
 
 // MarginAccountInfoResponse represents margin account details.
 type MarginAccountInfoResponse struct {
 	AccountNo       string      `json:"accountNo"`
 	RiskPolicy      *RiskPolicy `json:"riskPolicy,omitempty"`
-	RTT             float64     `json:"rtt"`
-	Outstanding     float64     `json:"outstanding"`
-	AccruedInterest float64     `json:"accruedInterest"`
-	DueAmount       float64     `json:"dueAmount"`
-	OverdueAmount   float64     `json:"overdueAmount"`
+	RTT             Number      `json:"rtt"`
+	Outstanding     Number      `json:"outstanding"`
+	AccruedInterest Number      `json:"accruedInterest"`
+	DueAmount       Number      `json:"dueAmount"`
+	OverdueAmount   Number      `json:"overdueAmount"`
 	RiskStatus      *RiskStatus `json:"riskStatus,omitempty"`
-	TotalFeeDebt    float64     `json:"totalFeeDebt"`
+	TotalFeeDebt    Number      `json:"totalFeeDebt"`
 }
 
 // RiskPolicy represents margin risk policy parameters.
 type RiskPolicy struct {
-	MaintenanceMargin float64 `json:"maintenanceMargin"`
-	InitialMargin     float64 `json:"initialMargin"`
-	LiquidationMargin float64 `json:"liquidationMargin"`
+	MaintenanceMargin Number `json:"maintenanceMargin"`
+	InitialMargin     Number `json:"initialMargin"`
+	LiquidationMargin Number `json:"liquidationMargin"`
 }
 
 // RiskStatus represents RTT status.

@@ -15,10 +15,11 @@ func TestGetStockPrices(t *testing.T) {
 		if tickers != "FPT,VNM" {
 			t.Errorf("unexpected tickers: %s", tickers)
 		}
-		writeJSON(t, w, []MarketStockInfo{
-			{Ticker: "FPT", MatchPrice: 120000},
-			{Ticker: "VNM", MatchPrice: 80000},
-		})
+		// The documented envelope and row shape of tickerCommons.
+		_, _ = w.Write([]byte(`{"data":[` +
+			`{"symbol":"FPT","ceilPrice":106100,"floorPrice":92300,"refPrice":99200,"bidPrice01":98700,"matchPrice":120000,"room":84},` +
+			`{"symbol":"VNM","refPrice":"79500","matchPrice":80000}` +
+			`],"tradingDate":"29/10/2024"}`))
 	})
 
 	resp, err := client.GetStockPrices(context.Background(), []string{"FPT", "VNM"})
@@ -28,8 +29,11 @@ func TestGetStockPrices(t *testing.T) {
 	if len(resp) != 2 {
 		t.Fatalf("expected 2 items, got %d", len(resp))
 	}
-	if resp[0].Ticker != "FPT" || resp[0].MatchPrice != 120000 {
+	if resp[0].Symbol != "FPT" || resp[0].MatchPrice != 120000 || resp[0].RefPrice != 99200 || resp[0].CeilPrice != 106100 || resp[0].BidPrice01 != 98700 {
 		t.Errorf("unexpected FPT data: %+v", resp[0])
+	}
+	if resp[1].Symbol != "VNM" || resp[1].RefPrice != 79500 {
+		t.Errorf("unexpected VNM data: %+v", resp[1])
 	}
 }
 

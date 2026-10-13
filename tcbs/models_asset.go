@@ -5,38 +5,38 @@ package tcbs
 // SeInfoDTO represents stock asset information.
 type SeInfoDTO struct {
 	Object    string             `json:"object"`
-	AccountNo string            `json:"accountNo"`
-	CustodyID string            `json:"custodyID"`
-	FullName  string            `json:"fullName"`
+	AccountNo string             `json:"accountNo"`
+	CustodyID string             `json:"custodyID"`
+	FullName  string             `json:"fullName"`
 	Stock     []StockHoldingInfo `json:"stock"`
 }
 
 // StockHoldingInfo represents a single stock holding.
 type StockHoldingInfo struct {
-	Symbol            string  `json:"symbol"`
-	SecType           string  `json:"secType"`
-	SecTypeName       string  `json:"secTypeName"`
-	AvailableTrading  float64 `json:"availableTrading"`
-	Mortgaged         float64 `json:"mortgaged"`
-	T0                float64 `json:"t0"`
-	T1                float64 `json:"t1"`
-	T2                float64 `json:"t2"`
-	Blocked           float64 `json:"blocked"`
-	SecuredQuantity   float64 `json:"securedQuantity"`
-	SellRemain        float64 `json:"sellRemain"`
-	ExercisedCA       float64 `json:"exercisedCA"`
-	UnexercisedCA     float64 `json:"unexercisedCA"`
-	StockDividend     float64 `json:"stockDividend"`
-	CashDividend      float64 `json:"cashDividend"`
-	WaitForTrade      float64 `json:"waitForTrade"`
-	WaitForTransfer   float64 `json:"waitForTransfer"`
-	WaitForWithdraw   float64 `json:"waitForWithdraw"`
-	CurrentPrice      float64 `json:"currentPrice"`
-	CostPrice         float64 `json:"costPrice"`
-	SellExec          float64 `json:"sellExec"`
-	OnHold            float64 `json:"onHold"`
-	TotalQtty         float64 `json:"totalQtty"`
-	Settlement        float64 `json:"settlement"`
+	Symbol           string `json:"symbol"`
+	SecType          string `json:"secType"`
+	SecTypeName      string `json:"secTypeName"`
+	AvailableTrading Number `json:"availableTrading"`
+	Mortgaged        Number `json:"mortgaged"`
+	T0               Number `json:"t0"`
+	T1               Number `json:"t1"`
+	T2               Number `json:"t2"`
+	Blocked          Number `json:"blocked"`
+	SecuredQuantity  Number `json:"securedQuantity"`
+	SellRemain       Number `json:"sellRemain"`
+	ExercisedCA      Number `json:"exercisedCA"`
+	UnexercisedCA    Number `json:"unexercisedCA"`
+	StockDividend    Number `json:"stockDividend"`
+	CashDividend     Number `json:"cashDividend"`
+	WaitForTrade     Number `json:"waitForTrade"`
+	WaitForTransfer  Number `json:"waitForTransfer"`
+	WaitForWithdraw  Number `json:"waitForWithdraw"`
+	CurrentPrice     Number `json:"currentPrice"`
+	CostPrice        Number `json:"costPrice"`
+	SellExec         Number `json:"sellExec"`
+	OnHold           Number `json:"onHold"`
+	TotalQtty        Number `json:"totalQtty"`
+	Settlement       Number `json:"settlement"`
 }
 
 // --- Cash Balance ---
@@ -54,40 +54,40 @@ type CashInvestmentResponse struct {
 type CashInvestment struct {
 	Object           string   `json:"object"`
 	IAInfos          []IAInfo `json:"iaInfos"`
-	PP0ForBF         float64  `json:"pp0forBF"`
-	BankAvlBalanceBF float64  `json:"bankAvlBalanceBF"`
-	BodBalance       float64  `json:"bodBalance"`
-	CashBalance      float64  `json:"cashBalance"`
+	PP0ForBF         Number   `json:"pp0forBF"`
+	BankAvlBalanceBF Number   `json:"bankAvlBalanceBF"`
+	BodBalance       Number   `json:"bodBalance"`
+	CashBalance      Number   `json:"cashBalance"`
 	AccountNo        string   `json:"accountNo"`
 	CustodyID        string   `json:"custodyID"`
 	FullName         string   `json:"fullName"`
-	Balance          float64  `json:"balance"`
-	AvlAdvanceAmount float64  `json:"avlAdvanceAmount"`
-	BuyingAmount     float64  `json:"buyingAmount"`
-	BlockAmount      float64  `json:"blockAmount"`
-	CashDividend     float64  `json:"cashDevident"` // note: typo in spec
-	BankAvlBalance   float64  `json:"bankAvlBalance"`
-	BankBlockAmount  float64  `json:"bankBlockAmount"`
-	AvlWithdraw      float64  `json:"avlWithdraw"`
-	PP0              float64  `json:"pp0"`
-	SecureAmtPO      float64  `json:"secureAmtPO"`
-	BondBlockAmount  float64  `json:"bondBlockAmount"`
-	MBlockAmount     float64  `json:"mBlockAmount"`
-	FundBlockAmount  float64  `json:"fundBlockAmount"`
-	AvalBondBlock    float64  `json:"avalBondBlockAmount"`
-	DepoFee          float64  `json:"depoFee"`
-	BCashDividend    float64  `json:"bCashDividend"`
-	SCashDividend    float64  `json:"sCashDividend"`
-	DSecured         float64  `json:"dsecured"`
-	AdUsed           float64  `json:"adused"`
-	MrUsed           float64  `json:"mrused"`
+	Balance          Number   `json:"balance"`
+	AvlAdvanceAmount Number   `json:"avlAdvanceAmount"`
+	BuyingAmount     Number   `json:"buyingAmount"`
+	BlockAmount      Number   `json:"blockAmount"`
+	CashDividend     Number   `json:"cashDevident"` // note: typo in spec
+	BankAvlBalance   Number   `json:"bankAvlBalance"`
+	BankBlockAmount  Number   `json:"bankBlockAmount"`
+	AvlWithdraw      Number   `json:"avlWithdraw"`
+	PP0              Number   `json:"pp0"`
+	SecureAmtPO      Number   `json:"secureAmtPO"`
+	BondBlockAmount  Number   `json:"bondBlockAmount"`
+	MBlockAmount     Number   `json:"mBlockAmount"`
+	FundBlockAmount  Number   `json:"fundBlockAmount"`
+	AvalBondBlock    Number   `json:"avalBondBlockAmount"`
+	DepoFee          Number   `json:"depoFee"`
+	BCashDividend    Number   `json:"bCashDividend"`
+	SCashDividend    Number   `json:"sCashDividend"`
+	DSecured         Number   `json:"dsecured"`
+	AdUsed           Number   `json:"adused"`
+	MrUsed           Number   `json:"mrused"`
 }
 
 // IAInfo represents instant account (IA) source information.
 type IAInfo struct {
-	Partner   string  `json:"partner"`
-	Available float64 `json:"available"`
-	Hold      float64 `json:"hold"`
+	Partner   string `json:"partner"`
+	Available Number `json:"available"`
+	Hold      Number `json:"hold"`
 }
 
 // --- Cash Statements ---
@@ -187,22 +187,22 @@ type TPlusData struct {
 
 // TPlusPackage represents a single T+ loan package.
 type TPlusPackage struct {
-	FirstRate                                    float64       `json:"firstRate"`
-	ID                                           float64       `json:"id"`
-	Name                                         string        `json:"name"`
-	Status                                       string        `json:"status"`
-	UndueInterestType                            string        `json:"undueInterestType"`
-	UndueLadderValue                             []TPlusLadder `json:"undueLadderValue"`
-	OverdueInterest                              float64       `json:"overdueInterest"`
-	ExtensionInterest                            float64       `json:"extensionInterest"`
-	ExtensionInterestBeforeInterestSettlement    float64       `json:"extensionInterestBeforeInterestSettlement"`
-	InterestCalculationBasis                     float64       `json:"interestCalculationBasis"`
-	UndueFee                                     float64       `json:"undueFee"`
-	OverdueFee                                   float64       `json:"overdueFee"`
-	ExtensionFee                                 float64       `json:"extensionFee"`
-	DebtCollectionFee                            float64       `json:"debtCollectionFee"`
-	Description                                  string        `json:"description"`
-	ValidFrom                                    string        `json:"validFrom"`
+	FirstRate                                 float64       `json:"firstRate"`
+	ID                                        float64       `json:"id"`
+	Name                                      string        `json:"name"`
+	Status                                    string        `json:"status"`
+	UndueInterestType                         string        `json:"undueInterestType"`
+	UndueLadderValue                          []TPlusLadder `json:"undueLadderValue"`
+	OverdueInterest                           float64       `json:"overdueInterest"`
+	ExtensionInterest                         float64       `json:"extensionInterest"`
+	ExtensionInterestBeforeInterestSettlement float64       `json:"extensionInterestBeforeInterestSettlement"`
+	InterestCalculationBasis                  float64       `json:"interestCalculationBasis"`
+	UndueFee                                  float64       `json:"undueFee"`
+	OverdueFee                                float64       `json:"overdueFee"`
+	ExtensionFee                              float64       `json:"extensionFee"`
+	DebtCollectionFee                         float64       `json:"debtCollectionFee"`
+	Description                               string        `json:"description"`
+	ValidFrom                                 string        `json:"validFrom"`
 }
 
 // TPlusLadder represents a ladder interest rate tier.

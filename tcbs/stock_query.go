@@ -66,7 +66,8 @@ func (c *Client) GetPurchasingPowerBySymbolPrice(ctx context.Context, accountNo,
 	return &resp, nil
 }
 
-// GetMarginQuota retrieves margin quota for the given custody ID.
+// GetMarginQuota returns the sub-accounts (with their margin limits) under the
+// given custody ID (105C...). ListAccounts is the clearer alias.
 func (c *Client) GetMarginQuota(ctx context.Context, custodyID string) ([]MarginQuotaResponse, error) {
 	var resp []MarginQuotaResponse
 	err := c.get(ctx, fmt.Sprintf("/aion/v1/customers/%s/accounts", custodyID), nil, &resp)
@@ -156,12 +157,12 @@ func (c *Client) GetCashStatements(ctx context.Context, params CashStatementPara
 
 // MarginInfoParams holds parameters for GetMarginInfo.
 type MarginInfoParams struct {
-	AccountNo  string
-	FromDate   string
-	ToDate     string
-	Page       string
-	Size       string
-	CustodyCD  string
+	AccountNo string
+	FromDate  string
+	ToDate    string
+	Page      string
+	Size      string
+	CustodyCD string
 }
 
 // GetMarginInfo retrieves debt inquiry information.

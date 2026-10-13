@@ -80,14 +80,53 @@ func (c *Client) currentToken() string {
 	return c.token
 }
 
+// maxErrorBody caps how much of a response body APIError.Error prints.
+const maxErrorBody = 512
+
 // APIError represents an error response from the TCBS API.
+// Code and Message are filled when the body is a {code,message} JSON object.
 type APIError struct {
 	StatusCode int
+	Code       string
+	Message    string
 	Body       string
 }
 
 func (e *APIError) Error() string {
-	return fmt.Sprintf("tcbs: API error status=%d body=%s", e.StatusCode, e.Body)
+	if e.Code != "" || e.Message != "" {
+		return fmt.Sprintf("tcbs: API error status=%d code=%s message=%s", e.StatusCode, e.Code, e.Message)
+	}
+	body := e.Body
+	if len(body) > maxErrorBody {
+		body = body[:maxErrorBody] + "...(truncated)"
+	}
+	return fmt.Sprintf("tcbs: API error status=%d body=%s", e.StatusCode, body)
+}
+
+// newAPIError builds an APIError, decoding {code,message} from the body when present.
+func newAPIError(statusCode int, body []byte) *APIError {
+	apiErr := &APIError{StatusCode: statusCode, Body: string(body)}
+	var payload struct {
+		Code    json.RawMessage `json:"code"`
+		Message string          `json:"message"`
+	}
+	if err := json.Unmarshal(body, &payload); err == nil {
+		apiErr.Code = rawCode(payload.Code)
+		apiErr.Message = payload.Message
+	}
+	return apiErr
+}
+
+// rawCode renders a code that may arrive as a JSON string or number.
+func rawCode(raw json.RawMessage) string {
+	if len(raw) == 0 || string(raw) == "null" {
+		return ""
+	}
+	var s string
+	if err := json.Unmarshal(raw, &s); err == nil {
+		return s
+	}
+	return string(raw)
 }
 
 func (c *Client) doRequest(ctx context.Context, method, path string, query url.Values, body any, result any) error {
@@ -131,10 +170,7 @@ func (c *Client) doRequest(ctx context.Context, method, path string, query url.V
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return &APIError{
-			StatusCode: resp.StatusCode,
-			Body:       string(respBody),
-		}
+		return newAPIError(resp.StatusCode, respBody)
 	}
 
 	if result != nil {

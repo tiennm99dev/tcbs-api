@@ -228,3 +228,54 @@ func TestGetCashStatements(t *testing.T) {
 		t.Errorf("unexpected response: %+v", resp)
 	}
 }
+
+func TestGetStockAssets_StringNumbers(t *testing.T) {
+	client, _ := newTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"accountNo":"ACC001","stock":[{"symbol":"FPT",
+			"availableTrading":"800","totalQtty":"1000","t0":0,"costPrice":"95000.5",
+			"currentPrice":120000,"stockDividend":null,"blocked":""}]}`))
+	})
+
+	resp, err := client.GetStockAssets(context.Background(), "ACC001")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(resp.Stock) != 1 {
+		t.Fatalf("unexpected response: %+v", resp)
+	}
+	s := resp.Stock[0]
+	if s.AvailableTrading != 800 || s.TotalQtty != 1000 {
+		t.Errorf("unexpected quantities: available=%v total=%v", s.AvailableTrading, s.TotalQtty)
+	}
+	if s.CostPrice != 95000.5 || s.CurrentPrice != 120000 {
+		t.Errorf("unexpected prices: cost=%v current=%v", s.CostPrice, s.CurrentPrice)
+	}
+	if s.StockDividend != 0 || s.Blocked != 0 {
+		t.Errorf("expected null and empty to decode as 0: %+v", s)
+	}
+}
+
+func TestGetCashBalance_StringNumbers(t *testing.T) {
+	client, _ := newTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"totalCount":1,"data":[{"accountNo":"ACC001",
+			"cashBalance":"15000000","avlAdvanceAmount":"0E-10","buyingAmount":2500000,
+			"iaInfos":[{"partner":"TCB","available":"300000","hold":null}]}]}`))
+	})
+
+	resp, err := client.GetCashBalance(context.Background(), "ACC001")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(resp.Data) != 1 {
+		t.Fatalf("unexpected response: %+v", resp)
+	}
+	c := resp.Data[0]
+	if c.CashBalance != 15000000 || c.AvlAdvanceAmount != 0 || c.BuyingAmount != 2500000 {
+		t.Errorf("unexpected amounts: %+v", c)
+	}
+	if len(c.IAInfos) != 1 || c.IAInfos[0].Available != 300000 {
+		t.Errorf("unexpected IA info: %+v", c.IAInfos)
+	}
+}

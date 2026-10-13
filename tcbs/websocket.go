@@ -32,11 +32,11 @@ type MessageHandler func(msgType websocket.MessageType, data []byte)
 
 // WSConn represents a managed WebSocket connection.
 type WSConn struct {
-	conn    *websocket.Conn
-	cancel  context.CancelFunc
-	done    chan struct{}
-	mu      sync.Mutex
-	closed  bool
+	conn   *websocket.Conn
+	cancel context.CancelFunc
+	done   chan struct{}
+	mu     sync.Mutex
+	closed bool
 }
 
 // Close gracefully closes the WebSocket connection.

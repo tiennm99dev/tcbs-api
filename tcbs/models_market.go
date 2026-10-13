@@ -2,31 +2,45 @@ package tcbs
 
 // --- Stock Price (REST) ---
 
-// MarketStockInfo represents stock ticker information from REST API.
+// MarketStockInfo is one row of GET /tartarus/v1/tickerCommons
+// (MarketInformationStockNormalResponseDTO). Prices are in VND.
 type MarketStockInfo struct {
-	Ticker          string  `json:"ticker"`
-	Exchange        string  `json:"exchange"`
-	RefPrice        float64 `json:"refPrice"`
-	CeilingPrice    float64 `json:"ceilingPrice"`
-	FloorPrice      float64 `json:"floorPrice"`
-	HighPrice       float64 `json:"highPrice"`
-	LowPrice        float64 `json:"lowPrice"`
-	MatchPrice      float64 `json:"matchPrice"`
-	MatchQtty       float64 `json:"matchQtty"`
-	TotalMatchQtty  float64 `json:"totalMatchQtty"`
-	TotalMatchValue float64 `json:"totalMatchValue"`
-	Best1BidPrice   float64 `json:"best1BidPrice"`
-	Best1BidQtty    float64 `json:"best1BidQtty"`
-	Best2BidPrice   float64 `json:"best2BidPrice"`
-	Best2BidQtty    float64 `json:"best2BidQtty"`
-	Best3BidPrice   float64 `json:"best3BidPrice"`
-	Best3BidQtty    float64 `json:"best3BidQtty"`
-	Best1OfferPrice float64 `json:"best1OfferPrice"`
-	Best1OfferQtty  float64 `json:"best1OfferQtty"`
-	Best2OfferPrice float64 `json:"best2OfferPrice"`
-	Best2OfferQtty  float64 `json:"best2OfferQtty"`
-	Best3OfferPrice float64 `json:"best3OfferPrice"`
-	Best3OfferQtty  float64 `json:"best3OfferQtty"`
+	Symbol          string `json:"symbol"`
+	CeilPrice       Number `json:"ceilPrice"`
+	FloorPrice      Number `json:"floorPrice"`
+	RefPrice        Number `json:"refPrice"`
+	BidPrice01      Number `json:"bidPrice01"`
+	BidPrice02      Number `json:"bidPrice02"`
+	BidPrice03      Number `json:"bidPrice03"`
+	BidQtty01       Number `json:"bidQtty01"`
+	BidQtty02       Number `json:"bidQtty02"`
+	BidQtty03       Number `json:"bidQtty03"`
+	OfferPrice01    Number `json:"offerPrice01"`
+	OfferPrice02    Number `json:"offerPrice02"`
+	OfferPrice03    Number `json:"offerPrice03"`
+	OfferQtty01     Number `json:"offerQtty01"`
+	OfferQtty02     Number `json:"offerQtty02"`
+	OfferQtty03     Number `json:"offerQtty03"`
+	MatchPrice      Number `json:"matchPrice"`
+	MatchQtty       Number `json:"matchQtty"`
+	Change          Number `json:"change"`
+	ChangePercent   Number `json:"changePercent"`
+	Open            Number `json:"open"`
+	High            Number `json:"high"`
+	Low             Number `json:"low"`
+	Avg             Number `json:"avg"`
+	TotalVol        Number `json:"totalVol"`
+	TotalVal        Number `json:"totalVal"`
+	OpenVol         Number `json:"openVol"`
+	BuyForeignQtty  Number `json:"buyForeignQtty"`
+	SellForeignQtty Number `json:"sellForeignQtty"`
+	IndexNumber     Number `json:"indexNumber"`
+}
+
+// MarketStockInfoResponse is the tickerCommons response envelope.
+type MarketStockInfoResponse struct {
+	Data        []MarketStockInfo `json:"data"`
+	TradingDate string            `json:"tradingDate"` // DD/MM/YYYY
 }
 
 // --- Foreign Room (REST) ---
@@ -68,9 +82,9 @@ type PutThroughAdvertisementInfo struct {
 
 // IntradayHistoryResponse represents intraday price matching history.
 type IntradayHistoryResponse struct {
-	Ticker string              `json:"ticker"`
-	Page   int                 `json:"page"`
-	Size   int                 `json:"size"`
+	Ticker string                `json:"ticker"`
+	Page   int                   `json:"page"`
+	Size   int                   `json:"size"`
 	Data   []IntradayHistoryItem `json:"data"`
 }
 
@@ -127,37 +141,37 @@ type SupplyDemand15mResponse struct {
 
 // WSStockInfo represents stock information from WebSocket stream.
 type WSStockInfo struct {
-	Symbol           string  `json:"symbol"`
-	CeilPrice        float64 `json:"ceilPrice"`
-	FloorPrice       float64 `json:"floorPrice"`
-	RefPrice         float64 `json:"refPrice"`
-	BidPrice01       float64 `json:"bidPrice01"`
-	BidPrice02       float64 `json:"bidPrice02"`
-	BidPrice03       float64 `json:"bidPrice03"`
-	BidQtty01        float64 `json:"bidQtty01"`
-	BidQtty02        float64 `json:"bidQtty02"`
-	BidQtty03        float64 `json:"bidQtty03"`
-	OfferPrice01     float64 `json:"offerPrice01"`
-	OfferPrice02     float64 `json:"offerPrice02"`
-	OfferPrice03     float64 `json:"offerPrice03"`
-	OfferQtty01      float64 `json:"offerQtty01"`
-	OfferQtty02      float64 `json:"offerQtty02"`
-	OfferQtty03      float64 `json:"offerQtty03"`
-	MatchPrice       float64 `json:"matchPrice"`
-	MatchQtty        float64 `json:"matchQtty"`
-	Change           float64 `json:"change"`
-	ChangePercent    float64 `json:"changePercent"`
-	Open             float64 `json:"open"`
-	High             float64 `json:"high"`
-	Low              float64 `json:"low"`
-	TotalVol         float64 `json:"totalVol"`
-	TotalVal         float64 `json:"totalVal"`
-	OpenVol          float64 `json:"openVol"`
-	BuyForeignQtty   float64 `json:"buyForeignQtty"`
-	SellForeignQtty  float64 `json:"sellForeignQtty"`
-	Room             string  `json:"room"`
-	Avg              float64 `json:"avg"`
-	IndexNumber      float64 `json:"indexNumber"`
+	Symbol          string  `json:"symbol"`
+	CeilPrice       float64 `json:"ceilPrice"`
+	FloorPrice      float64 `json:"floorPrice"`
+	RefPrice        float64 `json:"refPrice"`
+	BidPrice01      float64 `json:"bidPrice01"`
+	BidPrice02      float64 `json:"bidPrice02"`
+	BidPrice03      float64 `json:"bidPrice03"`
+	BidQtty01       float64 `json:"bidQtty01"`
+	BidQtty02       float64 `json:"bidQtty02"`
+	BidQtty03       float64 `json:"bidQtty03"`
+	OfferPrice01    float64 `json:"offerPrice01"`
+	OfferPrice02    float64 `json:"offerPrice02"`
+	OfferPrice03    float64 `json:"offerPrice03"`
+	OfferQtty01     float64 `json:"offerQtty01"`
+	OfferQtty02     float64 `json:"offerQtty02"`
+	OfferQtty03     float64 `json:"offerQtty03"`
+	MatchPrice      float64 `json:"matchPrice"`
+	MatchQtty       float64 `json:"matchQtty"`
+	Change          float64 `json:"change"`
+	ChangePercent   float64 `json:"changePercent"`
+	Open            float64 `json:"open"`
+	High            float64 `json:"high"`
+	Low             float64 `json:"low"`
+	TotalVol        float64 `json:"totalVol"`
+	TotalVal        float64 `json:"totalVal"`
+	OpenVol         float64 `json:"openVol"`
+	BuyForeignQtty  float64 `json:"buyForeignQtty"`
+	SellForeignQtty float64 `json:"sellForeignQtty"`
+	Room            string  `json:"room"`
+	Avg             float64 `json:"avg"`
+	IndexNumber     float64 `json:"indexNumber"`
 }
 
 // WSDerivativeInfo represents derivative information from WebSocket stream.

@@ -108,32 +108,32 @@ type DerivativeNormalOrderRequest struct {
 
 // DerivativeNormalOrderResponse represents a normal derivative order in list responses.
 type DerivativeNormalOrderResponse struct {
-	OrderNo     string  `json:"orderNo"`
-	PKOrderNo   string  `json:"pk_orderNo"`
-	RefID       string  `json:"refId"`
-	OrderTime   string  `json:"orderTime"`
-	AccountCode string  `json:"accountCode"`
-	Side        string  `json:"side"`
-	Symbol      string  `json:"symbol"`
-	Volume      float64 `json:"volume"`
-	ShowPrice   float64 `json:"showPrice"`
-	MatchVolume float64 `json:"matchVolume"`
+	OrderNo      string  `json:"orderNo"`
+	PKOrderNo    string  `json:"pk_orderNo"`
+	RefID        string  `json:"refId"`
+	OrderTime    string  `json:"orderTime"`
+	AccountCode  string  `json:"accountCode"`
+	Side         string  `json:"side"`
+	Symbol       string  `json:"symbol"`
+	Volume       float64 `json:"volume"`
+	ShowPrice    float64 `json:"showPrice"`
+	MatchVolume  float64 `json:"matchVolume"`
 	MatchPriceBQ float64 `json:"matchPriceBQ"`
-	Status      string  `json:"status"`
-	OrderStatus string  `json:"orderStatus"`
-	Channel     string  `json:"channel"`
-	Group       string  `json:"group"`
-	CancelTime  string  `json:"cancelTime"`
-	IsCancel    float64 `json:"isCancel"`
-	IsAmend     float64 `json:"isAmend"`
-	Info        string  `json:"info"`
-	MaxPrice    float64 `json:"maxPrice"`
-	MatchValue  float64 `json:"matchValue"`
-	Quote       string  `json:"quote"`
-	AutoType    string  `json:"autoType"`
-	Product     string  `json:"product"`
-	OrderType   string  `json:"orderType"`
-	Source      string  `json:"source"`
+	Status       string  `json:"status"`
+	OrderStatus  string  `json:"orderStatus"`
+	Channel      string  `json:"channel"`
+	Group        string  `json:"group"`
+	CancelTime   string  `json:"cancelTime"`
+	IsCancel     float64 `json:"isCancel"`
+	IsAmend      float64 `json:"isAmend"`
+	Info         string  `json:"info"`
+	MaxPrice     float64 `json:"maxPrice"`
+	MatchValue   float64 `json:"matchValue"`
+	Quote        string  `json:"quote"`
+	AutoType     string  `json:"autoType"`
+	Product      string  `json:"product"`
+	OrderType    string  `json:"orderType"`
+	Source       string  `json:"source"`
 }
 
 // DerivativeNormalOrderPlaceResponse represents the response after placing a normal order.
@@ -184,29 +184,29 @@ type DerivativeConditionOrderRequest struct {
 
 // DerivativeConditionOrderResponse represents a conditional order in list responses.
 type DerivativeConditionOrderResponse struct {
-	OrderNo    string  `json:"orderNo"`
-	GroupOrder string  `json:"groupOrder"`
-	PKOrderNo  string  `json:"pk_orderNo"`
-	AccountCode string `json:"accountCode"`
-	Side       string  `json:"side"`
-	Symbol     string  `json:"symbol"`
-	ShowPrice  float64 `json:"showPrice"`
-	Volume     float64 `json:"volume"`
-	Condition  string  `json:"condition"`
-	Result     string  `json:"result"`
-	ActiveTime string  `json:"active_time"`
-	SendTime   string  `json:"send_time"`
-	CancelTime string  `json:"cancel_time"`
-	Group      string  `json:"group"`
-	Channel    string  `json:"channel"`
-	MaxPrice   string  `json:"maxPrice"`
-	SOPrice    float64 `json:"soPrice"`
-	OrderType  string  `json:"orderType"`
-	FromTime   string  `json:"from_time"`
-	ExpTime    string  `json:"exp_time"`
-	Status     string  `json:"status"`
-	Details    string  `json:"details"`
-	Notes      string  `json:"notes"`
+	OrderNo     string  `json:"orderNo"`
+	GroupOrder  string  `json:"groupOrder"`
+	PKOrderNo   string  `json:"pk_orderNo"`
+	AccountCode string  `json:"accountCode"`
+	Side        string  `json:"side"`
+	Symbol      string  `json:"symbol"`
+	ShowPrice   float64 `json:"showPrice"`
+	Volume      float64 `json:"volume"`
+	Condition   string  `json:"condition"`
+	Result      string  `json:"result"`
+	ActiveTime  string  `json:"active_time"`
+	SendTime    string  `json:"send_time"`
+	CancelTime  string  `json:"cancel_time"`
+	Group       string  `json:"group"`
+	Channel     string  `json:"channel"`
+	MaxPrice    string  `json:"maxPrice"`
+	SOPrice     float64 `json:"soPrice"`
+	OrderType   string  `json:"orderType"`
+	FromTime    string  `json:"from_time"`
+	ExpTime     string  `json:"exp_time"`
+	Status      string  `json:"status"`
+	Details     string  `json:"details"`
+	Notes       string  `json:"notes"`
 }
 
 // DerivativeConditionOrderPlaceResponse represents the response after placing a condition order.

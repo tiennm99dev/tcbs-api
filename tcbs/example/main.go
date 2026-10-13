@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	tcbs "github.com/miti99dev/stock-advisor"
+	"github.com/miti99dev/stock-advisor/tcbs"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to get token: %v", err)
 	}
-	fmt.Printf("Token obtained: %s\n", token.Token)
+	fmt.Printf("Token obtained (%d chars)\n", len(token.Token))
 
 	// Or set token directly if you already have one:
 	// client.SetToken("your-jwt-token")
@@ -45,7 +45,7 @@ func main() {
 		log.Fatalf("Failed to get prices: %v", err)
 	}
 	for _, p := range prices {
-		fmt.Printf("%s: ref=%.0f match=%.0f\n", p.Ticker, p.RefPrice, p.MatchPrice)
+		fmt.Printf("%s: ref=%.0f match=%.0f\n", p.Symbol, p.RefPrice.Float(), p.MatchPrice.Float())
 	}
 
 	// 4. Place a stock order

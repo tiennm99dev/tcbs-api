@@ -7,17 +7,18 @@ import (
 	"strings"
 )
 
-// GetStockPrices retrieves stock ticker information and pricing.
+// GetStockPrices retrieves stock ticker information and pricing. It returns
+// the rows of the {data: [...]} envelope.
 func (c *Client) GetStockPrices(ctx context.Context, tickers []string) ([]MarketStockInfo, error) {
 	query := url.Values{}
 	query.Set("tickers", strings.Join(tickers, ","))
 
-	var resp []MarketStockInfo
+	var resp MarketStockInfoResponse
 	err := c.get(ctx, "/tartarus/v1/tickerCommons", query, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return resp, nil
+	return resp.Data, nil
 }
 
 // GetForeignRoom retrieves foreign investor room information.
