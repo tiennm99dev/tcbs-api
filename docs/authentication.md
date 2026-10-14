@@ -8,9 +8,8 @@ from its global bearer scheme, but the older spec marks the token call with
 an API key plus a one-time Smart OTP (iOTP).
 
 Sources: the `/gaia/v1/oauth2/openapi/*` operations and the getting-started
-text in [`references/openapi.json`](../references/openapi.json) and
-[`references/tcbs-openapi-v1.0.0.json`](../references/tcbs-openapi-v1.0.0.json),
-and the [TCBS developer portal](https://developers.tcbs.com.vn).
+text in the TCBS specs (the current portal spec and the earlier edition), and
+the [TCBS developer portal](https://developers.tcbs.com.vn).
 
 ## What you need
 

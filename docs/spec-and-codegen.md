@@ -3,19 +3,18 @@
 This module builds two clients from two editions of the TCBS iFlash Open API
 spec. This page records where each spec comes from, what is wrong with the
 current one, how `tools/specfix` repairs it, and what is still unknown about
-live responses.
+live responses. The specs belong to TCBS and are not kept in the current
+tree.
 
 ## The two specs
 
-| File | Edition | Operations | Used by |
+| Edition | Description | Operations | Used by |
 |---|---|---|---|
-| [`references/openapi.json`](../references/openapi.json) | Older spec, title "iFlash Open API", Vietnamese summaries, production and SIT servers | 46 (41 REST, 5 WebSocket) | the hand-written [`tcbs`](../tcbs/) package |
-| [`references/tcbs-openapi-v1.0.0.json`](../references/tcbs-openapi-v1.0.0.json) | Current portal spec, title "TCBS iFlash Open API", English, production server only | 48 REST | [`tools/specfix`](../tools/specfix/), then [`tcbsgen`](../tcbsgen/) |
-| [`tcbsgen/openapi.json`](../tcbsgen/openapi.json) | The portal spec after `specfix` | 48 | oapi-codegen input |
+| Earlier edition | Title "iFlash Open API", Vietnamese summaries, production and SIT servers; not published on the portal today | 46 (41 REST, 5 WebSocket) | the hand-written [`tcbs`](../tcbs/) package |
+| Current portal spec | Title "TCBS iFlash Open API", English, production server only, at `https://developers.tcbs.com.vn/specs/openapi-v1.0.0.json` | 48 REST | [`tools/specfix`](../tools/specfix/), then [`tcbsgen`](../tcbsgen/) |
 
-The portal spec is published on the [TCBS developer
-portal](https://developers.tcbs.com.vn) at
-`https://developers.tcbs.com.vn/specs/openapi-v1.0.0.json`.
+`go generate ./tcbsgen` downloads the current portal spec, pins it by SHA-256,
+and writes the repaired copy to `tcbsgen/openapi.json`, which is gitignored.
 
 What differs between the editions:
 
@@ -47,7 +46,7 @@ What differs between the editions:
 ## Why `tcbs` follows the older spec
 
 The hand-written client predates the portal spec and models the richer
-response shapes of `references/openapi.json`. Which shape the live API
+response shapes of the earlier edition. Which shape the live API
 returns for holdings and cash is not confirmed, so `tcbs` keeps the older
 shapes until a live response settles it. `tcbsgen` follows the portal
 exactly, so the two clients can be compared against the same account.
@@ -71,7 +70,7 @@ client (see the package comment in
    `specfix` drops them.
 3. **No operation IDs.** Without them, generators name methods after paths.
    `specfix` sets each ID from
-   [`references/tcbs-operation-ids.json`](../references/tcbs-operation-ids.json),
+   [`tcbsgen/operation-ids.json`](../tcbsgen/operation-ids.json),
    which names each operation after its portal docs page (`stock/asset`
    becomes `StockAsset`). Every operation must have an entry and every entry
    must match an operation, so a portal update that adds or renames an
@@ -124,18 +123,22 @@ because the affected fields are not confirmed.
 ## Refreshing the generated client
 
 ```bash
-curl -sSfo references/tcbs-openapi-v1.0.0.json https://developers.tcbs.com.vn/specs/openapi-v1.0.0.json
 go generate ./tcbsgen
-git diff --stat references tcbsgen
+git diff --stat tcbsgen
 ```
 
 `go generate` runs the two directives in
-[`tcbsgen/generate.go`](../tcbsgen/generate.go): `specfix` writes
-`tcbsgen/openapi.json`, then oapi-codegen (`@latest`, configured by
-`tcbsgen/oapi-codegen.yaml`) writes `tcbsgen/client.gen.go`. If `specfix`
-stops on an operation-ID mismatch, add or rename the entry in
-`references/tcbs-operation-ids.json` and run it again. Never edit the two
-generated files by hand.
+[`tcbsgen/generate.go`](../tcbsgen/generate.go): `specfix` downloads the
+portal spec, verifies its SHA-256, and writes the repaired
+`tcbsgen/openapi.json`; then oapi-codegen (`@latest`, configured by
+`tcbsgen/oapi-codegen.yaml`) writes `tcbsgen/client.gen.go`.
+
+- If the checksum check fails, TCBS has published a changed spec. Review the
+  change, put the new checksum in `tcbsgen/generate.go`, and regenerate.
+- If `specfix` stops on an operation-ID mismatch, add or rename the entry in
+  `tcbsgen/operation-ids.json` and run it again.
+
+Never edit `tcbsgen/client.gen.go` by hand.
 
 ## Generator comparison
 

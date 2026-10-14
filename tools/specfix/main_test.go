@@ -1,7 +1,13 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
@@ -112,5 +118,29 @@ func TestFixTopLevelArray(t *testing.T) {
 	if !reflect.DeepEqual(schema, want) {
 		got, _ := json.MarshalIndent(schema, "", " ")
 		t.Errorf("schema:\n%s", got)
+	}
+}
+
+func TestRunChecksSumAndURL(t *testing.T) {
+	dir := t.TempDir()
+	body := []byte(sample)
+	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.Write(body) }))
+	defer srv.Close()
+	orig := http.DefaultTransport
+	http.DefaultTransport = srv.Client().Transport // trusts the test server's certificate
+	t.Cleanup(func() { http.DefaultTransport = orig })
+	sum := sha256.Sum256(body)
+	good := hex.EncodeToString(sum[:])
+
+	ids := filepath.Join(dir, "ids.json")
+	if err := os.WriteFile(ids, []byte(`{"GET /accounts/{accountNo}/se": "StockAsset"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out := filepath.Join(dir, "out.json")
+	if err := run(srv.URL+"/spec.json", good, ids, out); err != nil {
+		t.Fatalf("matching checksum: %v", err)
+	}
+	if err := run(srv.URL+"/spec.json", strings.Repeat("0", 64), ids, out); err == nil || !strings.Contains(err.Error(), "the spec changed") {
+		t.Fatalf("mismatched checksum: err = %v", err)
 	}
 }

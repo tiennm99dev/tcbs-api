@@ -9,23 +9,34 @@
 // specfix rebuilds the nested schemas, drops the stray path parameters, and
 // sets each operationId from a "METHOD /path" -> "Name" JSON map.
 //
+// The spec belongs to TCBS and is not stored in this repository: -in is
+// normally the portal URL, and -sha256 pins the exact file the committed
+// client was generated from, so a changed portal spec fails loudly instead of
+// silently producing a different client.
+//
 // Usage:
 //
-//	specfix -in raw.json -ids operation-ids.json -out fixed.json
+//	specfix -in https://.../openapi-v1.0.0.json -sha256 <hex> -ids operation-ids.json -out fixed.json
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 )
 
 func main() {
-	in := flag.String("in", "", "portal OpenAPI spec (JSON)")
+	in := flag.String("in", "", "portal OpenAPI spec: an https URL or a local JSON file")
+	sum := flag.String("sha256", "", "expected SHA-256 of the -in content (hex); empty skips the check")
 	ids := flag.String("ids", "", `JSON map of "METHOD /path" to operationId`)
 	out := flag.String("out", "", "fixed spec output path")
 	flag.Parse()
@@ -33,16 +44,23 @@ func main() {
 		flag.Usage()
 		os.Exit(2)
 	}
-	if err := run(*in, *ids, *out); err != nil {
+	if err := run(*in, *sum, *ids, *out); err != nil {
 		fmt.Fprintln(os.Stderr, "specfix:", err)
 		os.Exit(1)
 	}
 }
 
-func run(inPath, idsPath, outPath string) error {
-	var spec map[string]any
-	if err := readJSON(inPath, &spec); err != nil {
+func run(in, wantSum, idsPath, outPath string) error {
+	raw, err := load(in)
+	if err != nil {
 		return err
+	}
+	if err := checkSum(raw, wantSum); err != nil {
+		return fmt.Errorf("%s: %w", in, err)
+	}
+	var spec map[string]any
+	if err := json.Unmarshal(raw, &spec); err != nil {
+		return fmt.Errorf("%s: %w", in, err)
 	}
 	var ids map[string]string
 	if err := readJSON(idsPath, &ids); err != nil {
@@ -61,6 +79,42 @@ func run(inPath, idsPath, outPath string) error {
 	}
 	fmt.Fprintf(os.Stderr, "specfix: %d flattened fields nested, %d stray path params dropped, %d operationIds set\n",
 		rep.Nested, rep.DroppedParams, rep.OperationIDs)
+	return nil
+}
+
+// load reads an https URL or a local file.
+func load(in string) ([]byte, error) {
+	if !strings.HasPrefix(in, "https://") {
+		return os.ReadFile(in)
+	}
+	client := &http.Client{Timeout: 60 * time.Second}
+	resp, err := client.Get(in)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("GET %s: %s", in, resp.Status)
+	}
+	const maxSpec = 32 << 20
+	b, err := io.ReadAll(io.LimitReader(resp.Body, maxSpec+1))
+	if err != nil {
+		return nil, fmt.Errorf("GET %s: %w", in, err)
+	}
+	if len(b) > maxSpec {
+		return nil, fmt.Errorf("GET %s: spec larger than %d bytes", in, maxSpec)
+	}
+	return b, nil
+}
+
+func checkSum(b []byte, want string) error {
+	if want == "" {
+		return nil
+	}
+	sum := sha256.Sum256(b)
+	if got := hex.EncodeToString(sum[:]); !strings.EqualFold(got, want) {
+		return fmt.Errorf("sha256 %s, want %s: the spec changed; review it, then update the pinned checksum", got, want)
+	}
 	return nil
 }
 
