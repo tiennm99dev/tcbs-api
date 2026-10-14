@@ -1,6 +1,0 @@
-[
-  {"custodyID":"105C000001","accountNo":"0001N","accountStatus":"A","accountType":"normal","marginLimit":"0"},
-  {"custodyID":"105C000001","accountNo":"0001G","accountStatus":"A","accountType":"margin","marginLimit":500000000},
-  {"custodyID":"105C000001","accountNo":"0001X","accountStatus":"C","accountType":"normal","marginLimit":"0"},
-  {"custodyID":"105C000001","accountNo":"0001W","accountStatus":"A","accountType":"CW","marginLimit":0}
-]

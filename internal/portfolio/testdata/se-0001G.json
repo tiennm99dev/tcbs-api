@@ -1,9 +1,0 @@
-{
-  "object": "se",
-  "accountNo": "0001G",
-  "custodyID": "105C000001",
-  "fullName": "TEST USER",
-  "stock": [
-    {"symbol":"FPT","secType":"001","totalQtty":500,"availableTrading":400,"t0":0,"t1":0,"t2":0,"blocked":20,"mortgaged":50,"onHold":30,"stockDividend":50,"cashDividend":1000000,"costPrice":100000,"currentPrice":120300}
-  ]
-}
