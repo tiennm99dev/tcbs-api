@@ -1,0 +1,342 @@
+// Command specfix turns the TCBS developer-portal OpenAPI spec into one that
+// code generators can use. The portal spec has three defects:
+//
+//   - nested response fields are written as flat property names such as
+//     "assets[].symbol" or "data.items[].price";
+//   - some operations declare path parameters that their path does not have;
+//   - no operation has an operationId, so generators name methods after paths.
+//
+// specfix rebuilds the nested schemas, drops the stray path parameters, and
+// sets each operationId from a "METHOD /path" -> "Name" JSON map.
+//
+// Usage:
+//
+//	specfix -in raw.json -ids operation-ids.json -out fixed.json
+package main
+
+import (
+	"encoding/json"
+	"flag"
+	"fmt"
+	"os"
+	"regexp"
+	"sort"
+	"strings"
+)
+
+func main() {
+	in := flag.String("in", "", "portal OpenAPI spec (JSON)")
+	ids := flag.String("ids", "", `JSON map of "METHOD /path" to operationId`)
+	out := flag.String("out", "", "fixed spec output path")
+	flag.Parse()
+	if *in == "" || *ids == "" || *out == "" {
+		flag.Usage()
+		os.Exit(2)
+	}
+	if err := run(*in, *ids, *out); err != nil {
+		fmt.Fprintln(os.Stderr, "specfix:", err)
+		os.Exit(1)
+	}
+}
+
+func run(inPath, idsPath, outPath string) error {
+	var spec map[string]any
+	if err := readJSON(inPath, &spec); err != nil {
+		return err
+	}
+	var ids map[string]string
+	if err := readJSON(idsPath, &ids); err != nil {
+		return err
+	}
+	rep, err := Fix(spec, ids)
+	if err != nil {
+		return err
+	}
+	b, err := json.MarshalIndent(spec, "", "  ")
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(outPath, append(b, '\n'), 0o644); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stderr, "specfix: %d flattened fields nested, %d stray path params dropped, %d operationIds set\n",
+		rep.Nested, rep.DroppedParams, rep.OperationIDs)
+	return nil
+}
+
+func readJSON(path string, v any) error {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	if err := json.Unmarshal(b, v); err != nil {
+		return fmt.Errorf("%s: %w", path, err)
+	}
+	return nil
+}
+
+// Report counts what Fix changed.
+type Report struct {
+	Nested        int
+	DroppedParams int
+	OperationIDs  int
+}
+
+var methods = []string{"get", "put", "post", "delete", "patch", "head", "options"}
+
+var pathParam = regexp.MustCompile(`{(\w+)}`)
+
+// Fix repairs spec in place. Every operation must have an entry in ids, and
+// every ids entry must match an operation, so a portal update that adds or
+// renames an endpoint fails loudly instead of generating a path-named method.
+func Fix(spec map[string]any, ids map[string]string) (Report, error) {
+	var rep Report
+	paths, _ := spec["paths"].(map[string]any)
+	used := map[string]bool{}
+	var missing []string
+	for path, rawItem := range paths {
+		item, _ := rawItem.(map[string]any)
+		names := map[string]bool{}
+		for _, m := range pathParam.FindAllStringSubmatch(path, -1) {
+			names[m[1]] = true
+		}
+		rep.DroppedParams += dropStrayParams(item, names)
+		for _, method := range methods {
+			op, ok := item[method].(map[string]any)
+			if !ok {
+				continue
+			}
+			rep.DroppedParams += dropStrayParams(op, names)
+			key := strings.ToUpper(method) + " " + path
+			id, ok := ids[key]
+			if !ok {
+				missing = append(missing, key)
+				continue
+			}
+			op["operationId"] = id
+			used[key] = true
+			rep.OperationIDs++
+		}
+	}
+	var stale []string
+	for key := range ids {
+		if !used[key] {
+			stale = append(stale, key)
+		}
+	}
+	if len(missing) > 0 || len(stale) > 0 {
+		sort.Strings(missing)
+		sort.Strings(stale)
+		return rep, fmt.Errorf("operation-id map out of date: missing %v, unknown %v", missing, stale)
+	}
+
+	walkSchemas(spec["paths"], &rep)
+	if comps, ok := spec["components"].(map[string]any); ok {
+		if schemas, ok := comps["schemas"].(map[string]any); ok {
+			for name, s := range schemas {
+				schemas[name] = nest(s, &rep)
+			}
+		}
+	}
+	return rep, nil
+}
+
+// dropStrayParams removes path parameters whose name is not in the path.
+func dropStrayParams(scope map[string]any, names map[string]bool) int {
+	params, ok := scope["parameters"].([]any)
+	if !ok {
+		return 0
+	}
+	keep := params[:0:0]
+	for _, raw := range params {
+		p, _ := raw.(map[string]any)
+		if p["in"] == "path" && !names[fmt.Sprint(p["name"])] {
+			continue
+		}
+		keep = append(keep, raw)
+	}
+	scope["parameters"] = keep
+	return len(params) - len(keep)
+}
+
+// walkSchemas nests every "schema" value found under v.
+func walkSchemas(v any, rep *Report) {
+	switch t := v.(type) {
+	case map[string]any:
+		for k, child := range t {
+			if k == "schema" {
+				t[k] = nest(child, rep)
+				continue
+			}
+			walkSchemas(child, rep)
+		}
+	case []any:
+		for _, child := range t {
+			walkSchemas(child, rep)
+		}
+	}
+}
+
+type segment struct {
+	name  string
+	array bool
+}
+
+func splitFlat(name string) []segment {
+	parts := strings.Split(name, ".")
+	segs := make([]segment, len(parts))
+	for i, p := range parts {
+		segs[i] = segment{name: strings.TrimSuffix(p, "[]"), array: strings.HasSuffix(p, "[]")}
+	}
+	return segs
+}
+
+func isFlat(name string) bool {
+	return strings.Contains(name, ".") || strings.HasSuffix(name, "[]")
+}
+
+// nest rebuilds the object tree of a schema whose property names are flattened
+// paths, then recurses into the result.
+func nest(raw any, rep *Report) any {
+	s, ok := raw.(map[string]any)
+	if !ok {
+		return raw
+	}
+	for _, k := range []string{"items", "additionalProperties"} {
+		if child, ok := s[k].(map[string]any); ok {
+			s[k] = nest(child, rep)
+		}
+	}
+	for _, k := range []string{"allOf", "oneOf", "anyOf"} {
+		if list, ok := s[k].([]any); ok {
+			for i := range list {
+				list[i] = nest(list[i], rep)
+			}
+		}
+	}
+	props, ok := s["properties"].(map[string]any)
+	if !ok {
+		return s
+	}
+
+	// Plain names first, then flattened ones from shallow to deep, so a parent
+	// declared as its own property is in place before its children attach.
+	names := make([]string, 0, len(props))
+	for n := range props {
+		names = append(names, n)
+	}
+	sort.Slice(names, func(i, j int) bool {
+		di, dj := strings.Count(names[i], "."), strings.Count(names[j], ".")
+		if isFlat(names[i]) != isFlat(names[j]) {
+			return !isFlat(names[i])
+		}
+		if di != dj {
+			return di < dj
+		}
+		return names[i] < names[j]
+	})
+
+	root := map[string]any{}
+	for _, name := range names {
+		sub, _ := props[name].(map[string]any)
+		if !isFlat(name) {
+			root[name] = sub
+			continue
+		}
+		rep.Nested++
+		place(root, splitFlat(name), sub)
+	}
+	s["properties"] = root
+
+	if req, ok := s["required"].([]any); ok {
+		kept := req[:0:0]
+		for _, r := range req {
+			if _, ok := root[fmt.Sprint(r)]; ok {
+				kept = append(kept, r)
+			}
+		}
+		if len(kept) == 0 {
+			delete(s, "required")
+		} else {
+			s["required"] = kept
+		}
+	}
+	for n, child := range root {
+		root[n] = nest(child, rep)
+	}
+	return s
+}
+
+// place puts leaf at the flattened path segs under props, creating the
+// intermediate objects and arrays of objects on the way.
+func place(props map[string]any, segs []segment, leaf map[string]any) {
+	seg := segs[0]
+	if len(segs) == 1 {
+		if existing, ok := props[seg.name].(map[string]any); ok && isContainer(existing) {
+			copyDescription(existing, leaf)
+			return
+		}
+		if seg.array {
+			props[seg.name] = map[string]any{"type": "array", "items": leaf}
+		} else {
+			props[seg.name] = leaf
+		}
+		return
+	}
+
+	node, _ := props[seg.name].(map[string]any)
+	var obj map[string]any
+	if seg.array {
+		items, _ := node["items"].(map[string]any)
+		if node == nil || node["type"] != "array" || items == nil || !objectLike(items) {
+			node = replaceKeepingDescription(node, map[string]any{"type": "array", "items": map[string]any{}})
+			items = node["items"].(map[string]any)
+		}
+		obj = items
+	} else {
+		if node == nil || !objectLike(node) {
+			node = replaceKeepingDescription(node, map[string]any{})
+		}
+		obj = node
+	}
+	obj["type"] = "object"
+	child, _ := obj["properties"].(map[string]any)
+	if child == nil {
+		child = map[string]any{}
+		obj["properties"] = child
+	}
+	props[seg.name] = node
+	place(child, segs[1:], leaf)
+}
+
+func objectLike(s map[string]any) bool {
+	t, has := s["type"]
+	return !has || t == "object"
+}
+
+func isContainer(s map[string]any) bool {
+	if _, ok := s["properties"]; ok {
+		return true
+	}
+	items, ok := s["items"].(map[string]any)
+	if !ok {
+		return false
+	}
+	_, ok = items["properties"]
+	return ok
+}
+
+func copyDescription(dst, src map[string]any) {
+	if d, ok := src["description"]; ok {
+		if _, has := dst["description"]; !has {
+			dst["description"] = d
+		}
+	}
+}
+
+func replaceKeepingDescription(old, fresh map[string]any) map[string]any {
+	if old != nil {
+		copyDescription(fresh, old)
+	}
+	return fresh
+}

@@ -1,0 +1,5 @@
+package: tcbsgen
+generate:
+  models: true
+  client: true
+output: client.gen.go
