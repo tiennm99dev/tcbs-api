@@ -84,3 +84,33 @@ func TestFixOperationIDMapMustMatch(t *testing.T) {
 		t.Fatalf("err = %v", err)
 	}
 }
+
+func TestFixTopLevelArray(t *testing.T) {
+	spec := decode(t, `{"paths": {"/customers/{custodyId}/accounts": {"get": {
+	  "responses": {"200": {"content": {"application/json": {"schema": {
+	    "type": "object",
+	    "description": "Sub-accounts.",
+	    "properties": {
+	      "[].accountNo": {"type": "string"},
+	      "[].bank.name": {"type": "string"}
+	    }
+	  }}}}}
+	}}}}`)
+	if _, err := Fix(spec, map[string]string{"GET /customers/{custodyId}/accounts": "StockMarginLimit"}); err != nil {
+		t.Fatal(err)
+	}
+	op := spec["paths"].(map[string]any)["/customers/{custodyId}/accounts"].(map[string]any)["get"].(map[string]any)
+	schema := op["responses"].(map[string]any)["200"].(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)["schema"]
+	want := decode(t, `{
+	  "type": "array",
+	  "description": "Sub-accounts.",
+	  "items": {"type": "object", "properties": {
+	    "accountNo": {"type": "string"},
+	    "bank": {"type": "object", "properties": {"name": {"type": "string"}}}
+	  }}
+	}`)
+	if !reflect.DeepEqual(schema, want) {
+		got, _ := json.MarshalIndent(schema, "", " ")
+		t.Errorf("schema:\n%s", got)
+	}
+}

@@ -6057,44 +6057,7 @@ type StockMarginLimitResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *struct {
-		Empty *[]struct {
-			// AccountNo Account number.
-			AccountNo *string `json:"accountNo,omitempty"`
-
-			// AccountStatus Status: A = Active, P = Pending, C = Closed, B = Blocked, N = Pending close, R = Rejected, T = Pending update.
-			AccountStatus *string `json:"accountStatus,omitempty"`
-
-			// AccountType Account type: normal, margin, copier, trader, CHILD, CW, SPW, SPT.
-			AccountType *string `json:"accountType,omitempty"`
-
-			// Aftype Contract type.
-			Aftype *string `json:"aftype,omitempty"`
-
-			// BankAccount IA-connected bank account.
-			BankAccount *string `json:"bankAccount,omitempty"`
-
-			// BankName IA-connected bank name.
-			BankName *string `json:"bankName,omitempty"`
-
-			// CustodyID Custody ID.
-			CustodyID *string `json:"custodyID,omitempty"`
-
-			// IsIA IA connection: Y = Yes, N = No.
-			IsIA *string `json:"isIA,omitempty"`
-
-			// MarginLimit Margin limit of the sub-account.
-			MarginLimit *float64 `json:"marginLimit,omitempty"`
-
-			// VsdStatus VSD status.
-			VsdStatus *string `json:"vsdStatus,omitempty"`
-		} `json:",omitempty"`
-	}
-}
-
-// GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r StockMarginLimitResponse) GetJSON200() *struct {
-	Empty *[]struct {
+	JSON200 *[]struct {
 		// AccountNo Account number.
 		AccountNo *string `json:"accountNo,omitempty"`
 
@@ -6124,7 +6087,40 @@ func (r StockMarginLimitResponse) GetJSON200() *struct {
 
 		// VsdStatus VSD status.
 		VsdStatus *string `json:"vsdStatus,omitempty"`
-	} `json:",omitempty"`
+	}
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r StockMarginLimitResponse) GetJSON200() *[]struct {
+	// AccountNo Account number.
+	AccountNo *string `json:"accountNo,omitempty"`
+
+	// AccountStatus Status: A = Active, P = Pending, C = Closed, B = Blocked, N = Pending close, R = Rejected, T = Pending update.
+	AccountStatus *string `json:"accountStatus,omitempty"`
+
+	// AccountType Account type: normal, margin, copier, trader, CHILD, CW, SPW, SPT.
+	AccountType *string `json:"accountType,omitempty"`
+
+	// Aftype Contract type.
+	Aftype *string `json:"aftype,omitempty"`
+
+	// BankAccount IA-connected bank account.
+	BankAccount *string `json:"bankAccount,omitempty"`
+
+	// BankName IA-connected bank name.
+	BankName *string `json:"bankName,omitempty"`
+
+	// CustodyID Custody ID.
+	CustodyID *string `json:"custodyID,omitempty"`
+
+	// IsIA IA connection: Y = Yes, N = No.
+	IsIA *string `json:"isIA,omitempty"`
+
+	// MarginLimit Margin limit of the sub-account.
+	MarginLimit *float64 `json:"marginLimit,omitempty"`
+
+	// VsdStatus VSD status.
+	VsdStatus *string `json:"vsdStatus,omitempty"`
 } {
 	return r.JSON200
 }
@@ -7030,52 +7026,7 @@ type StockRiskRatiosResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *struct {
-		Empty *[]struct {
-			// AccountNo Account number.
-			AccountNo *string `json:"accountNo,omitempty"`
-
-			// AccruedInterest Accrued interest.
-			AccruedInterest *float64 `json:"accruedInterest,omitempty"`
-
-			// DueAmount Due amount.
-			DueAmount *float64 `json:"dueAmount,omitempty"`
-
-			// Outstanding Total principal debt.
-			Outstanding *float64 `json:"outstanding,omitempty"`
-
-			// OverdueAmount Overdue amount.
-			OverdueAmount *float64 `json:"overdueAmount,omitempty"`
-			RiskPolicy    *struct {
-				// InitialMargin Initial margin ratio.
-				InitialMargin *float64 `json:"initialMargin,omitempty"`
-
-				// LiquidationMargin Liquidation margin ratio.
-				LiquidationMargin *float64 `json:"liquidationMargin,omitempty"`
-
-				// MaintenanceMargin Maintenance margin ratio.
-				MaintenanceMargin *float64 `json:"maintenanceMargin,omitempty"`
-			} `json:"riskPolicy,omitempty"`
-			RiskStatus *struct {
-				// Code Risk status code.
-				Code *string `json:"code,omitempty"`
-
-				// Description Risk status description.
-				Description *string `json:"description,omitempty"`
-			} `json:"riskStatus,omitempty"`
-
-			// Rtt Actual Rtt.
-			Rtt *float64 `json:"rtt,omitempty"`
-
-			// TotalFeeDebt Total fee debt (Marginsure fee).
-			TotalFeeDebt *float64 `json:"totalFeeDebt,omitempty"`
-		} `json:",omitempty"`
-	}
-}
-
-// GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r StockRiskRatiosResponse) GetJSON200() *struct {
-	Empty *[]struct {
+	JSON200 *[]struct {
 		// AccountNo Account number.
 		AccountNo *string `json:"accountNo,omitempty"`
 
@@ -7113,7 +7064,48 @@ func (r StockRiskRatiosResponse) GetJSON200() *struct {
 
 		// TotalFeeDebt Total fee debt (Marginsure fee).
 		TotalFeeDebt *float64 `json:"totalFeeDebt,omitempty"`
-	} `json:",omitempty"`
+	}
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r StockRiskRatiosResponse) GetJSON200() *[]struct {
+	// AccountNo Account number.
+	AccountNo *string `json:"accountNo,omitempty"`
+
+	// AccruedInterest Accrued interest.
+	AccruedInterest *float64 `json:"accruedInterest,omitempty"`
+
+	// DueAmount Due amount.
+	DueAmount *float64 `json:"dueAmount,omitempty"`
+
+	// Outstanding Total principal debt.
+	Outstanding *float64 `json:"outstanding,omitempty"`
+
+	// OverdueAmount Overdue amount.
+	OverdueAmount *float64 `json:"overdueAmount,omitempty"`
+	RiskPolicy    *struct {
+		// InitialMargin Initial margin ratio.
+		InitialMargin *float64 `json:"initialMargin,omitempty"`
+
+		// LiquidationMargin Liquidation margin ratio.
+		LiquidationMargin *float64 `json:"liquidationMargin,omitempty"`
+
+		// MaintenanceMargin Maintenance margin ratio.
+		MaintenanceMargin *float64 `json:"maintenanceMargin,omitempty"`
+	} `json:"riskPolicy,omitempty"`
+	RiskStatus *struct {
+		// Code Risk status code.
+		Code *string `json:"code,omitempty"`
+
+		// Description Risk status description.
+		Description *string `json:"description,omitempty"`
+	} `json:"riskStatus,omitempty"`
+
+	// Rtt Actual Rtt.
+	Rtt *float64 `json:"rtt,omitempty"`
+
+	// TotalFeeDebt Total fee debt (Marginsure fee).
+	TotalFeeDebt *float64 `json:"totalFeeDebt,omitempty"`
 } {
 	return r.JSON200
 }
@@ -10982,38 +10974,36 @@ func ParseStockMarginLimitResponse(rsp *http.Response) (*StockMarginLimitRespons
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest struct {
-			Empty *[]struct {
-				// AccountNo Account number.
-				AccountNo *string `json:"accountNo,omitempty"`
+		var dest []struct {
+			// AccountNo Account number.
+			AccountNo *string `json:"accountNo,omitempty"`
 
-				// AccountStatus Status: A = Active, P = Pending, C = Closed, B = Blocked, N = Pending close, R = Rejected, T = Pending update.
-				AccountStatus *string `json:"accountStatus,omitempty"`
+			// AccountStatus Status: A = Active, P = Pending, C = Closed, B = Blocked, N = Pending close, R = Rejected, T = Pending update.
+			AccountStatus *string `json:"accountStatus,omitempty"`
 
-				// AccountType Account type: normal, margin, copier, trader, CHILD, CW, SPW, SPT.
-				AccountType *string `json:"accountType,omitempty"`
+			// AccountType Account type: normal, margin, copier, trader, CHILD, CW, SPW, SPT.
+			AccountType *string `json:"accountType,omitempty"`
 
-				// Aftype Contract type.
-				Aftype *string `json:"aftype,omitempty"`
+			// Aftype Contract type.
+			Aftype *string `json:"aftype,omitempty"`
 
-				// BankAccount IA-connected bank account.
-				BankAccount *string `json:"bankAccount,omitempty"`
+			// BankAccount IA-connected bank account.
+			BankAccount *string `json:"bankAccount,omitempty"`
 
-				// BankName IA-connected bank name.
-				BankName *string `json:"bankName,omitempty"`
+			// BankName IA-connected bank name.
+			BankName *string `json:"bankName,omitempty"`
 
-				// CustodyID Custody ID.
-				CustodyID *string `json:"custodyID,omitempty"`
+			// CustodyID Custody ID.
+			CustodyID *string `json:"custodyID,omitempty"`
 
-				// IsIA IA connection: Y = Yes, N = No.
-				IsIA *string `json:"isIA,omitempty"`
+			// IsIA IA connection: Y = Yes, N = No.
+			IsIA *string `json:"isIA,omitempty"`
 
-				// MarginLimit Margin limit of the sub-account.
-				MarginLimit *float64 `json:"marginLimit,omitempty"`
+			// MarginLimit Margin limit of the sub-account.
+			MarginLimit *float64 `json:"marginLimit,omitempty"`
 
-				// VsdStatus VSD status.
-				VsdStatus *string `json:"vsdStatus,omitempty"`
-			} `json:",omitempty"`
+			// VsdStatus VSD status.
+			VsdStatus *string `json:"vsdStatus,omitempty"`
 		}
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
@@ -11526,46 +11516,44 @@ func ParseStockRiskRatiosResponse(rsp *http.Response) (*StockRiskRatiosResponse,
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest struct {
-			Empty *[]struct {
-				// AccountNo Account number.
-				AccountNo *string `json:"accountNo,omitempty"`
+		var dest []struct {
+			// AccountNo Account number.
+			AccountNo *string `json:"accountNo,omitempty"`
 
-				// AccruedInterest Accrued interest.
-				AccruedInterest *float64 `json:"accruedInterest,omitempty"`
+			// AccruedInterest Accrued interest.
+			AccruedInterest *float64 `json:"accruedInterest,omitempty"`
 
-				// DueAmount Due amount.
-				DueAmount *float64 `json:"dueAmount,omitempty"`
+			// DueAmount Due amount.
+			DueAmount *float64 `json:"dueAmount,omitempty"`
 
-				// Outstanding Total principal debt.
-				Outstanding *float64 `json:"outstanding,omitempty"`
+			// Outstanding Total principal debt.
+			Outstanding *float64 `json:"outstanding,omitempty"`
 
-				// OverdueAmount Overdue amount.
-				OverdueAmount *float64 `json:"overdueAmount,omitempty"`
-				RiskPolicy    *struct {
-					// InitialMargin Initial margin ratio.
-					InitialMargin *float64 `json:"initialMargin,omitempty"`
+			// OverdueAmount Overdue amount.
+			OverdueAmount *float64 `json:"overdueAmount,omitempty"`
+			RiskPolicy    *struct {
+				// InitialMargin Initial margin ratio.
+				InitialMargin *float64 `json:"initialMargin,omitempty"`
 
-					// LiquidationMargin Liquidation margin ratio.
-					LiquidationMargin *float64 `json:"liquidationMargin,omitempty"`
+				// LiquidationMargin Liquidation margin ratio.
+				LiquidationMargin *float64 `json:"liquidationMargin,omitempty"`
 
-					// MaintenanceMargin Maintenance margin ratio.
-					MaintenanceMargin *float64 `json:"maintenanceMargin,omitempty"`
-				} `json:"riskPolicy,omitempty"`
-				RiskStatus *struct {
-					// Code Risk status code.
-					Code *string `json:"code,omitempty"`
+				// MaintenanceMargin Maintenance margin ratio.
+				MaintenanceMargin *float64 `json:"maintenanceMargin,omitempty"`
+			} `json:"riskPolicy,omitempty"`
+			RiskStatus *struct {
+				// Code Risk status code.
+				Code *string `json:"code,omitempty"`
 
-					// Description Risk status description.
-					Description *string `json:"description,omitempty"`
-				} `json:"riskStatus,omitempty"`
+				// Description Risk status description.
+				Description *string `json:"description,omitempty"`
+			} `json:"riskStatus,omitempty"`
 
-				// Rtt Actual Rtt.
-				Rtt *float64 `json:"rtt,omitempty"`
+			// Rtt Actual Rtt.
+			Rtt *float64 `json:"rtt,omitempty"`
 
-				// TotalFeeDebt Total fee debt (Marginsure fee).
-				TotalFeeDebt *float64 `json:"totalFeeDebt,omitempty"`
-			} `json:",omitempty"`
+			// TotalFeeDebt Total fee debt (Marginsure fee).
+			TotalFeeDebt *float64 `json:"totalFeeDebt,omitempty"`
 		}
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err

@@ -218,6 +218,10 @@ func nest(raw any, rep *Report) any {
 	if !ok {
 		return s
 	}
+	if arr := topLevelArray(s, props); arr != nil {
+		rep.Nested += len(props)
+		return nest(arr, rep)
+	}
 
 	// Plain names first, then flattened ones from shallow to deep, so a parent
 	// declared as its own property is in place before its children attach.
@@ -265,6 +269,26 @@ func nest(raw any, rep *Report) any {
 		root[n] = nest(child, rep)
 	}
 	return s
+}
+
+// topLevelArray handles a response that is itself an array: the portal writes
+// its item fields as "[].name". It returns the equivalent array schema, or nil
+// when the properties are not all of that form.
+func topLevelArray(s, props map[string]any) map[string]any {
+	items := map[string]any{}
+	for name, sub := range props {
+		rest, ok := strings.CutPrefix(name, "[].")
+		if !ok {
+			return nil
+		}
+		items[rest] = sub
+	}
+	arr := map[string]any{
+		"type":  "array",
+		"items": map[string]any{"type": "object", "properties": items},
+	}
+	copyDescription(arr, s)
+	return arr
 }
 
 // place puts leaf at the flattened path segs under props, creating the

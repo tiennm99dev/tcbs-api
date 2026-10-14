@@ -612,58 +612,53 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "": {
-                      "items": {
-                        "properties": {
-                          "accountNo": {
-                            "description": "Account number.",
-                            "type": "string"
-                          },
-                          "accountStatus": {
-                            "description": "Status: A = Active, P = Pending, C = Closed, B = Blocked, N = Pending close, R = Rejected, T = Pending update.",
-                            "type": "string"
-                          },
-                          "accountType": {
-                            "description": "Account type: normal, margin, copier, trader, CHILD, CW, SPW, SPT.",
-                            "type": "string"
-                          },
-                          "aftype": {
-                            "description": "Contract type.",
-                            "type": "string"
-                          },
-                          "bankAccount": {
-                            "description": "IA-connected bank account.",
-                            "type": "string"
-                          },
-                          "bankName": {
-                            "description": "IA-connected bank name.",
-                            "type": "string"
-                          },
-                          "custodyID": {
-                            "description": "Custody ID.",
-                            "type": "string"
-                          },
-                          "isIA": {
-                            "description": "IA connection: Y = Yes, N = No.",
-                            "type": "string"
-                          },
-                          "marginLimit": {
-                            "description": "Margin limit of the sub-account.",
-                            "format": "double",
-                            "type": "number"
-                          },
-                          "vsdStatus": {
-                            "description": "VSD status.",
-                            "type": "string"
-                          }
-                        },
-                        "type": "object"
+                  "items": {
+                    "properties": {
+                      "accountNo": {
+                        "description": "Account number.",
+                        "type": "string"
                       },
-                      "type": "array"
-                    }
+                      "accountStatus": {
+                        "description": "Status: A = Active, P = Pending, C = Closed, B = Blocked, N = Pending close, R = Rejected, T = Pending update.",
+                        "type": "string"
+                      },
+                      "accountType": {
+                        "description": "Account type: normal, margin, copier, trader, CHILD, CW, SPW, SPT.",
+                        "type": "string"
+                      },
+                      "aftype": {
+                        "description": "Contract type.",
+                        "type": "string"
+                      },
+                      "bankAccount": {
+                        "description": "IA-connected bank account.",
+                        "type": "string"
+                      },
+                      "bankName": {
+                        "description": "IA-connected bank name.",
+                        "type": "string"
+                      },
+                      "custodyID": {
+                        "description": "Custody ID.",
+                        "type": "string"
+                      },
+                      "isIA": {
+                        "description": "IA connection: Y = Yes, N = No.",
+                        "type": "string"
+                      },
+                      "marginLimit": {
+                        "description": "Margin limit of the sub-account.",
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "vsdStatus": {
+                        "description": "VSD status.",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
                   },
-                  "type": "object"
+                  "type": "array"
                 }
               }
             },
@@ -1615,84 +1610,79 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "": {
-                      "items": {
+                  "items": {
+                    "properties": {
+                      "accountNo": {
+                        "description": "Account number.",
+                        "type": "string"
+                      },
+                      "accruedInterest": {
+                        "description": "Accrued interest.",
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "dueAmount": {
+                        "description": "Due amount.",
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "outstanding": {
+                        "description": "Total principal debt.",
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "overdueAmount": {
+                        "description": "Overdue amount.",
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "riskPolicy": {
                         "properties": {
-                          "accountNo": {
-                            "description": "Account number.",
-                            "type": "string"
-                          },
-                          "accruedInterest": {
-                            "description": "Accrued interest.",
+                          "initialMargin": {
+                            "description": "Initial margin ratio.",
                             "format": "double",
                             "type": "number"
                           },
-                          "dueAmount": {
-                            "description": "Due amount.",
+                          "liquidationMargin": {
+                            "description": "Liquidation margin ratio.",
                             "format": "double",
                             "type": "number"
                           },
-                          "outstanding": {
-                            "description": "Total principal debt.",
-                            "format": "double",
-                            "type": "number"
-                          },
-                          "overdueAmount": {
-                            "description": "Overdue amount.",
-                            "format": "double",
-                            "type": "number"
-                          },
-                          "riskPolicy": {
-                            "properties": {
-                              "initialMargin": {
-                                "description": "Initial margin ratio.",
-                                "format": "double",
-                                "type": "number"
-                              },
-                              "liquidationMargin": {
-                                "description": "Liquidation margin ratio.",
-                                "format": "double",
-                                "type": "number"
-                              },
-                              "maintenanceMargin": {
-                                "description": "Maintenance margin ratio.",
-                                "format": "double",
-                                "type": "number"
-                              }
-                            },
-                            "type": "object"
-                          },
-                          "riskStatus": {
-                            "properties": {
-                              "code": {
-                                "description": "Risk status code.",
-                                "type": "string"
-                              },
-                              "description": {
-                                "description": "Risk status description.",
-                                "type": "string"
-                              }
-                            },
-                            "type": "object"
-                          },
-                          "rtt": {
-                            "description": "Actual Rtt.",
-                            "format": "double",
-                            "type": "number"
-                          },
-                          "totalFeeDebt": {
-                            "description": "Total fee debt (Marginsure fee).",
+                          "maintenanceMargin": {
+                            "description": "Maintenance margin ratio.",
                             "format": "double",
                             "type": "number"
                           }
                         },
                         "type": "object"
                       },
-                      "type": "array"
-                    }
+                      "riskStatus": {
+                        "properties": {
+                          "code": {
+                            "description": "Risk status code.",
+                            "type": "string"
+                          },
+                          "description": {
+                            "description": "Risk status description.",
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "rtt": {
+                        "description": "Actual Rtt.",
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "totalFeeDebt": {
+                        "description": "Total fee debt (Marginsure fee).",
+                        "format": "double",
+                        "type": "number"
+                      }
+                    },
+                    "type": "object"
                   },
-                  "type": "object"
+                  "type": "array"
                 }
               }
             },
